@@ -8,7 +8,7 @@ class Dodge {
 		HIT_RIGHT = 1,
 		HIT_BOTH = 2;
 
-	private int motorSpeed = 900;
+	private int motorSpeed = 250;
 
 	private Random rnd;
 
@@ -81,10 +81,6 @@ class Dodge {
 
 			switch(hit) {
 				case HIT_BOTH:
-					rightBackward();
-					leftBackward();
-
-					Thread.sleep(750);
 
 					if(rnd.nextBoolean()) {
 						rightForward();
@@ -93,20 +89,20 @@ class Dodge {
 						leftForward();
 					}
 
-					Thread.sleep(750);
+					Thread.sleep(750 + rnd.nextInt(1000));
 					break;
 				case HIT_RIGHT:
 					rightFloat();
+					sleep(1000 + rnd.nextInt(1000));
 					break;
 				case HIT_LEFT:
 					leftFloat();
+					sleep(1000 + rnd.nextInt(1000));
 					break;
 				default:
 					Sound.beepSequence();		// Mark error by beeping.
 					break;
 			}
-
-			Thread.sleep(200);
 
 			drive();
 		}
