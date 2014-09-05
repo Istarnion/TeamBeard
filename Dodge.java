@@ -37,7 +37,7 @@ class Dodge {
 			leftForward();
 
 			try {
-				while(!crashRight() || !crashLeft()) {
+				while(!crashRight() && !crashLeft()) {
 					if(Button.ESCAPE.isDown()) {
 						return;
 					}
@@ -67,7 +67,9 @@ class Dodge {
 	}
 
 	private void escape(int hit) {
-		
+		if(Button.ESCAPE.isDown()) {
+			System.exit(0);
+		}
 		try {
 			LCD.clear();
 			System.out.println("ESCAPE!");
