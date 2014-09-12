@@ -146,12 +146,14 @@ class Tunnel extends Thread {
 		sleep(2000);
 	}
 
+	// This is what happens in the separate thread.
 	@Override
 	public void run() {
 		while(!Button.ESCAPE.isDown()) {
+			// The sound is playing in it's own thread, so we're actually running three processor threads. Still, having the 'driving curcuit' on its own make it easier to manage.
 			Sound.playSample(imperialMarch, Sound.VOL_MAX);
 			try {
-				Thread.sleep(9033);
+				Thread.sleep(9033);	// The sleep value here is exactly the length of the song.
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -159,21 +161,47 @@ class Tunnel extends Thread {
 		}
 	}
 
+	/*
+	* This is our main driving logic.
+	* It's responsibility is to keep driving and check for events.
+	* When an event happens, it breaks the loop, and call the apropriate function.
+	*/
 	private void drive() {
 		try {
-			rightForward();
-			leftForward();
-			int soundVal = 0;
+			rightForward();			// Rigt motor forward
+			leftForward();			// Left motor forward
+			int soundVal = 0;		// Initialize soundVal to zero, so it is ready to store the actual values.
+			int lightVal = 0;		// same with light
+
+			boolean forward = true;
 
 			try {
+				// While everything is normal, we just drive on.
 				while(!crashRight() && !crashLeft() && soundVal < 80) {
-					if(Button.ESCAPE.isDown() || light.readValue() < 3) {
+					// If the escape button is pressed, we interrupt the music, and terminate the program.
+					if(Button.ESCAPE.isDown()) {
 						System.exit(0);
 						this.interrupt();
 					}
-					soundVal = sound.readValue();
 
-					Thread.yield();
+					soundVal = sound.readValue();	// Update the soundVal. This way we won't need to get the value again further down.
+					lightVal = light.readValue();	// Same with the light sensor.
+
+					// change direction if lightsensor tells us to
+					if(lightVal <= 10) {
+						if(forward) {
+							forward = false;
+							rightBackward();
+							leftBackward();
+						}
+						else {
+							forward = true;
+							rightForward();
+							leftForward();
+						}
+					}
+
+					Thread.yield();		// Yield the processor to the music-thread. Even without that, it's good practice to let the processor breathe if you have an infinite loop.
 				}
 			}
 			catch(Exception e) {
@@ -182,6 +210,8 @@ class Tunnel extends Thread {
 				System.exit(0);
 			}	
 
+	
+			// first, we check the sound.
 			if(soundVal >= 80) {
 				// stop
 				rightFloat();
@@ -191,6 +221,7 @@ class Tunnel extends Thread {
 				// drive on. You crazy diamond.
 				drive();
 			}
+			// If not sound, we have crashed and need to work out how we crashed.
 			else if(crashRight() && crashLeft()) {
 				escape(HIT_BOTH);
 			}
@@ -215,7 +246,7 @@ class Tunnel extends Thread {
 			rightBackward();
 			leftBackward();
 
-			Thread.sleep(1000);
+			Thread.sleep(500);
 
 			switch(hit) {
 				case HIT_BOTH:
@@ -227,15 +258,15 @@ class Tunnel extends Thread {
 						leftForward();
 					}
 
-					Thread.sleep(750 + rnd.nextInt(1000));
+					sleep(500 + rnd.nextInt(1000));
 					break;
 				case HIT_RIGHT:
 					rightFloat();
-					sleep(1000 + rnd.nextInt(1000));
+					sleep(500 + rnd.nextInt(1000));
 					break;
 				case HIT_LEFT:
 					leftFloat();
-					sleep(1000 + rnd.nextInt(1000));
+					sleep(500 + rnd.nextInt(1000));
 					break;
 				default:
 					Sound.beepSequence();		// Mark error by beeping.
@@ -284,6 +315,7 @@ class Tunnel extends Thread {
 		return touch2.isPressed();
 	}
 
+	// Handled sleep for convenience
 	private void sleep(int i) {
 		try {
 			Thread.sleep(i);
