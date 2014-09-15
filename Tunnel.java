@@ -106,7 +106,6 @@ class Tunnel extends Thread {
 		Motor.A.setSpeed(motorSpeed);
 		Motor.C.setSpeed(motorSpeed);
 		Motor.B.setSpeed(900);
-		Motor.B.backward();
 
 		imperialMarch = new File("imperial.wav");
 
@@ -175,9 +174,13 @@ class Tunnel extends Thread {
 
 			boolean forward = true;
 
+			long lastTimeISawBlack = 0;
+
+			Motor.B.backward();
+
 			try {
 				// While everything is normal, we just drive on.
-				while(!crashRight() && !crashLeft() && soundVal < 80) {
+				while(!crashRight() && !crashLeft() && soundVal < 85) {
 					// If the escape button is pressed, we interrupt the music, and terminate the program.
 					if(Button.ESCAPE.isDown()) {
 						System.exit(0);
@@ -188,16 +191,19 @@ class Tunnel extends Thread {
 					lightVal = light.readValue();	// Same with the light sensor.
 
 					// change direction if lightsensor tells us to
-					if(lightVal <= 10) {
+					if(lightVal <= 50 && (System.currentTimeMillis()-lastTimeISawBlack > 2000)) {
+						lastTimeISawBlack = System.currentTimeMillis();
 						if(forward) {
 							forward = false;
 							rightBackward();
 							leftBackward();
+							Motor.B.forward(); // reverse the brush too.
 						}
 						else {
 							forward = true;
 							rightForward();
 							leftForward();
+							Motor.B.backward();
 						}
 					}
 
