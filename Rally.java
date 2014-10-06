@@ -48,16 +48,20 @@ class Rally {
 		driveForward();
 		while(!Button.ESCAPE.isDown()) {
 			/* DRVING LOGIC HERE */
-			if(middle) {
+			if(middle && !left) {
 				// GO!
 				driveForward();
 				search = false;
 			}
+			else if(middle && left) {
+				accelLeftTurn();
+				shouldTurn = 2;
+			}
 			else {
 				// Stop, determine wich side to turn, and turn.
 				if(!search) {
-					Motor.A.setSpeed(50);
-					Motor.C.setSpeed(50);
+					Motor.A.setSpeed(100);
+					Motor.C.setSpeed(100);
 					search = true;
 					rightMotorTargetSpeed = Motor.A.getSpeed();
 					leftMotorTargetSpeed = Motor.C.getSpeed();
