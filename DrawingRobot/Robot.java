@@ -2,99 +2,99 @@ package drawingRobot;
 
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * 
+ * 
+ * 
  */
 
 public class Robot
 {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private Robot singleton;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private Motor xAxis;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private Motor yAxis;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private int degreesPerUnit;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private int xPos;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private int yPos;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private Motor marker;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	private boolean isDown;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
+	 * 
+	 * 
+	 * 
 	 */
 	public Robot(){
 		super();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	public Robot getInstance() {
@@ -103,10 +103,10 @@ public class Robot
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	public int getXPos() {
@@ -115,10 +115,10 @@ public class Robot
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	public void setXPos(int xPos) {
@@ -126,10 +126,10 @@ public class Robot
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	public int getXPos() {
@@ -138,10 +138,10 @@ public class Robot
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	public void setYPos(int yPos) {
@@ -149,10 +149,10 @@ public class Robot
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	public void setMarker(boolean down) {
@@ -160,22 +160,22 @@ public class Robot
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
-	public Boolean[][] scan() {
+	public boolean[][] scan() {
 		// TODO implement me
 		return null;	
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	
 	public void calibrate() {

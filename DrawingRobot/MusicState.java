@@ -2,20 +2,27 @@ package drawingRobot;
 
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * MusicState.java
+ * 
+ * 
  */
 
-public class MusicState
+public class MusicState implements State
 {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
+	 * 
+	 * 
+	 * 
 	 */
-	public MusicState(){
-		super();
+	public MusicState()
+	{
+		
+	}
+
+	@Override
+	public void init()
+	{
+
 	}
 
 }
