@@ -25,7 +25,7 @@ public class Robot
 	 * 
 	 */
 	
-	private Motor xAxis;
+	private NXTRegulatedMotor xAxis;
 	
 	/**
 	 * 
@@ -34,7 +34,7 @@ public class Robot
 	 * 
 	 */
 	
-	private Motor yAxis;
+	private NXTRegulatedMotor yAxis;
 	
 	/**
 	 * 
@@ -45,24 +45,37 @@ public class Robot
 	
 	private int degreesPerUnit;
 	
+
+	/**
+	*
+	*
+	*/
+	private final static int xPosMax = 49;
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * 
 	 */
-	
+
 	private int xPos;
 	
 	/**
+	*
+	*
+	*/
+	private final static int yPosMax = 70;
+
+	/**
 	 * 
 	 * 
 	 * 
 	 * 
 	 */
-	
+		
 	private int yPos;
-	
+
 	/**
 	 * 
 	 * 
@@ -70,7 +83,7 @@ public class Robot
 	 * 
 	 */
 	
-	private Motor marker;
+	private NXTRegulatedMotor marker;
 	
 	/**
 	 * 
@@ -86,8 +99,13 @@ public class Robot
 	 * 
 	 * 
 	 */
-	public Robot(){
-		super();
+	private Robot(){
+		xAxis 		= Motor.B;
+		yAxis 		= Motor.A;
+		marker 		= Motor.C;
+
+		setXPos(0);
+		setYPos(0);
 	}
 
 	/**
@@ -97,32 +115,34 @@ public class Robot
 	 * 
 	 */
 	
-	public Robot getInstance() {
-		// TODO implement me
-		return null;	
+	public static Robot getInstance() {
+		if(singleton==null)
+		{
+			singleton = new Robot();
+		}
+		return singleton;	
 	}
 	
 	/**
-	 * 
+	 * Get current xPos
 	 * 
 	 * 
 	 * 
 	 */
 	
 	public int getXPos() {
-		// TODO implement me
-		return 0;	
+		return xPos;	
 	}
 	
 	/**
-	 * 
+	 * Set xPos
 	 * 
 	 * 
 	 * 
 	 */
 	
 	public void setXPos(int xPos) {
-		// TODO implement me	
+		this.xPos = xPos;	
 	}
 	
 	/**
@@ -132,9 +152,8 @@ public class Robot
 	 * 
 	 */
 	
-	public int getXPos() {
-		// TODO implement me
-		return 0;	
+	public int getYPos() {
+		return yPos;	
 	}
 	
 	/**
@@ -145,7 +164,7 @@ public class Robot
 	 */
 	
 	public void setYPos(int yPos) {
-		// TODO implement me	
+		this.yPos = yPos;	
 	}
 	
 	/**
@@ -156,7 +175,7 @@ public class Robot
 	 */
 	
 	public void setMarker(boolean down) {
-		// TODO implement me	
+		marker = down;
 	}
 	
 	/**

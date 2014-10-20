@@ -2,7 +2,8 @@ package drawingRobot;
 
 
 /**
- * MusicState.java
+ * Music State!
+ *
  * 
  * 
  */
