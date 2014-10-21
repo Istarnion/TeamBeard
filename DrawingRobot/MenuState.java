@@ -71,28 +71,28 @@ public class MenuState implements State {
 	private void drawMenu(){
 		LCD.clearDisplay();
 		if(currOption==COPY){
-			LCD.drawString(">Copy",2,1,true);
+			LCD.drawString(">Copy",2,0,true);
 		}
 		else{
-			LCD.drawString(" Copy",2,1,false);
+			LCD.drawString(" Copy",2,0,false);
 		}
 		if(currOption==MUSIC){
-			LCD.drawString(">Play Music",2,3,true);
+			LCD.drawString(">Play Music",2,2,true);
 		}
 		else{
-			LCD.drawString(" Play Music",2,3,false);
+			LCD.drawString(" Play Music",2,2,false);
 		}
 		if(currOption==DRAW){
-			LCD.drawString(">Draw",2,5,true);
+			LCD.drawString(">Draw",2,4,true);
 		}
 		else{
-			LCD.drawString(" Draw",2,5,false);
+			LCD.drawString(" Draw",2,4,false);
 		}
 		if(currOption==CANCEL){
-			LCD.drawString(">Cancel",2,7,true);
+			LCD.drawString(">Cancel",2,6,true);
 		}
 		else{
-			LCD.drawString(" Cancel",2,7,false);
+			LCD.drawString(" Cancel",2,6,false);
 		}
 	}
 	public void resume() {
