@@ -10,7 +10,7 @@ import lejos.nxt.*;
 
 public class MenuState implements State {
 	//options
-	private static int COPY=0, MUSIC=1, DRAW=2;
+	private static final int COPY=0, MUSIC=1, DRAW=2, CANCEL=3;
 	private int currOption=0;
 
 	private StateMachine sam;
@@ -33,19 +33,37 @@ public class MenuState implements State {
 	
 	@Override
 	public void init() {
+		drawMenu();
 		while(Button.ESCAPE.isUp()){
 			Thread.yield();
 			if(Button.ENTER.isDown()){
+				Button.ENTER.waitForPressAndRelease();
+				switch(currOption){
+					case COPY:
+					//sam.push(new CopyState());
+					break;
+					case MUSIC:
+					sam.push(new MusicState());
+					break;
+					case DRAW:
+					//sam.push(new DrawState());
+					break;
+					case CANCEL:
+					System.exit(0);
+					break;
+				}
 
 			}
 			else if(Button.LEFT.isDown()){
+				Button.LEFT.waitForPressAndRelease();
 				currOption--;
-				if(currOption<0) currOption=2;
+				if(currOption<0) currOption=3;
 				drawMenu();
 			}
 			else if(Button.RIGHT.isDown()){
+				Button.RIGHT.waitForPressAndRelease();
 				currOption++;
-				if(currOption>2) currOption=0;
+				if(currOption>3) currOption=0;
 				drawMenu();
 			}
 		}
@@ -53,22 +71,28 @@ public class MenuState implements State {
 	private void drawMenu(){
 		LCD.clearDisplay();
 		if(currOption==COPY){
-			System.out.println(">Copy");
+			LCD.drawString(">Copy",2,1,true);
 		}
 		else{
-			System.out.println(" Copy");
+			LCD.drawString(" Copy",2,1,false);
 		}
 		if(currOption==MUSIC){
-			System.out.println(">Play Music");
+			LCD.drawString(">Play Music",2,3,true);
 		}
 		else{
-			System.out.println(" Play Music");
+			LCD.drawString(" Play Music",2,3,false);
 		}
 		if(currOption==DRAW){
-			System.out.println(">Draw");
+			LCD.drawString(">Draw",2,5,true);
 		}
 		else{
-			System.out.println(" Draw");
+			LCD.drawString(" Draw",2,5,false);
+		}
+		if(currOption==CANCEL){
+			LCD.drawString(">Cancel",2,7,true);
+		}
+		else{
+			LCD.drawString(" Cancel",2,7,false);
 		}
 	}
 	public void resume() {
