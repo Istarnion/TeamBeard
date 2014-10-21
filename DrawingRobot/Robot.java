@@ -1,5 +1,4 @@
-package drawingRobot;
-
+import lejos.nxt.*;
 
 /**
  * 
@@ -15,8 +14,7 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
-	private Robot singleton;
+	private static Robot singleton;
 	
 	/**
 	 * 
@@ -24,7 +22,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	private NXTRegulatedMotor xAxis;
 	
 	/**
@@ -33,7 +30,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	private NXTRegulatedMotor yAxis;
 	
 	/**
@@ -42,15 +38,13 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	private int degreesPerUnit;
 	
 
 	/**
-	*
-	*
+	*	The maximum positions of the x axis, in pixels.
 	*/
-	private final static int xPosMax = 49;
+	public final static int X_POS_MAX = 49;
 
 	/**
 	 * 
@@ -58,22 +52,19 @@ public class Robot
 	 * 
 	 * 
 	 */
-
 	private int xPos;
 	
 	/**
-	*
-	*
+	*	The maximum positions of the y axis, in pixels.
 	*/
-	private final static int yPosMax = 70;
+	public final static int Y_POS_MAX = 70;
 
 	/**
 	 * 
 	 * 
 	 * 
 	 * 
-	 */
-		
+	 */	
 	private int yPos;
 
 	/**
@@ -82,7 +73,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	private NXTRegulatedMotor marker;
 	
 	/**
@@ -91,7 +81,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	private boolean isDown;
 	
 	/**
@@ -114,7 +103,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	public static Robot getInstance() {
 		if(singleton==null)
 		{
@@ -129,7 +117,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	public int getXPos() {
 		return xPos;	
 	}
@@ -140,7 +127,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	public void setXPos(int xPos) {
 		this.xPos = xPos;	
 	}
@@ -151,7 +137,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	public int getYPos() {
 		return yPos;	
 	}
@@ -162,7 +147,6 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	public void setYPos(int yPos) {
 		this.yPos = yPos;	
 	}
@@ -173,9 +157,8 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	public void setMarker(boolean down) {
-		marker = down;
+		
 	}
 	
 	/**
@@ -184,22 +167,7 @@ public class Robot
 	 * 
 	 * 
 	 */
-	
 	public boolean[][] scan() {
-		// TODO implement me
 		return null;	
 	}
-	
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	
-	public void calibrate() {
-		// TODO implement me	
-	}
-	
 }
-
