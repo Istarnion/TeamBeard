@@ -1,3 +1,6 @@
+import lejos.nxt.*;
+
+
 /**
  * 
  * 
@@ -11,9 +14,9 @@ public class CopyState implements State
 
 	boolean[][] drawing;
 
-	public void init()
+	public void init() {}
 
-	public void resume()
+	public void resume() {}
 
 
 	/**
@@ -23,23 +26,28 @@ public class CopyState implements State
 	 */
 	public CopyState(){
 
-		robot = Robot.getInstance;
+		robot = robot.getInstance();
 		drawing = robot.scan();
 
 		System.out.println("Insert copy paper");
 
 		Button.ENTER.waitForPressAndRelease();
 
-		Robot.setXPos(0);
-		Robot.setYPost(0);
+		robot.setXPos(0);
+		robot.setYPos(0);
+		int x = 0;
+		int y = 0;
 
-		while (Robot.Y_POS <= Robot.Y_POS_MAX) {
-			while (Robot.X_POS <= Robot.X_POS_MAX) {
-				if ([x][y] == true) {
-					setMarker(true);
-					setMarker(false);
+		while (robot.getYPos() <= robot.Y_POS_MAX) {
+			while (robot.getXPos() <= robot.X_POS_MAX) {
+				if (drawing[x][y] == true) {
+					robot.setMarker(true);
+					robot.setMarker(false);
 				}
+				x++;
 			}
+			robot.setXPos(0);
+			y++;
 		}
 
 /*		if 
