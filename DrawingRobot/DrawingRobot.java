@@ -1,30 +1,20 @@
-package drawingRobot;
+import lejos.nxt.*;
 
-
-/**
+/**DrawingRobot.java
  * 
- * 
- * 
+ * <p>
+ * The main class.
+ * We just initializes the stateMachine, and 
  */
-
 public class DrawingRobot
 {
+
 	/**
 	 * 
 	 * 
 	 * 
 	 * 
 	 */
-	
-	private Robot robot;
-	
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	
 	private StateMachine stateMachine;
 	
 	/**
@@ -33,30 +23,11 @@ public class DrawingRobot
 	 * 
 	 */
 	public DrawingRobot(){
-		super();
+		stateMachine = new StateMachine();
+		stateMachine.push(new MenuState(stateMachine));
 	}
 
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	
 	public static void main(String[] args) {
-		// TODO implement me	
+		new DrawingRobot();	
 	}
-	
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	
-	private void initStates() {
-		// TODO implement me	
-	}
-	
 }
-
