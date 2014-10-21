@@ -1,65 +1,39 @@
-package drawingRobot;
+import java.util.Stack;
 
-
-/**
+/** StateMachine.java
  * 
- * 
- * 
+ * <p>
+ * This is a simple implementation of a finite state machine.
+ * It is stack-based.
+ * Having a HashMap to store all states, was decided against, due to restrictions in memory.
  */
-
 public class StateMachine
 {
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	
-	private HashMap<State> states;
-	
-	/**
+	private Stack<State> stateStack;
+
+	/** Constructor
 	 * 
-	 * 
-	 * 
+	 * <p>
+	 * Initializes the stack.
 	 */
-	public StateMachine(){
-		super();
+	public StateMachine() {
+		stateStack = new Stack<State>();
 	}
 
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	
 	public State pop() {
-		// TODO implement me
-		return null;	
+		State s = stateStack.pop();
+		stateStack.peek().resume();
+		return null;
 	}
-	
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	
 	public State peek() {
-		// TODO implement me
-		return null;	
+		return stateStack.peek();	
 	}
 	
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	
 	public void push(State s) {
-		// TODO implement me	
+		stateStack.push(s);
+		s.init();	
 	}
 	
 }
