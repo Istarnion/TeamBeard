@@ -30,6 +30,7 @@ public class MusicState implements State {
 	*/
 	@Override
 	public void init() {
+		LCD.clear();
 		scanArray = robot.scan();
 		test();
 	}
@@ -63,7 +64,7 @@ public class MusicState implements State {
 	private static void chooseTonality() {
 	}
 
-	private void generateAllToneBonanza() {
+	private static void generateAllToneBonanza() {
 
 		// Generates frequency for composition array
 		// First for loop goes through the rows of the scanArray (y-axis)
@@ -72,29 +73,35 @@ public class MusicState implements State {
 
 			// First nested for loop goes through the first half of the row
 			// Count the number of "true", this amount will be used to chose a note from the scaleArray
-			for(int x = 0; x < (scanArray.length / 2); x++)
-			{
-				if(scanArray[y][x])
-					trueCounter++;
+				for(int x = 0; x < (scanArray.length / 2); x++)
+				{
+					if(scanArray[x][y])
+						trueCounter++;
+				}
+			try {
+				composition[0][y*2] = noteArray[trueCounter];
+				composition[1][y*2+1] = trueCounter * 100;
+				trueCounter = 0;
 			}
-			composition[0][y*2] = noteArray[trueCounter];
-			composition[1][y*2+1] = trueCounter * 100;
-			trueCounter = 0;
-			// Second nesten for loop goes through the second half of the row
-			for(int x = (scanArray.length / 2); x < scanArray.length; x++)
-			{
-				if(scanArray[y][x])
-					trueCounter++;
+			catch(Exception e) {
+				System.out.println("FAILED FIRST");
 			}
-			composition[0][y*2 + 1] = noteArray[trueCounter];
-			composition[1][y*2] = trueCounter * 100;
-			trueCounter = 0;
+
+				// Second nesten for loop goes through the second half of the row
+				for(int x = (scanArray.length / 2); x < scanArray.length; x++)
+				{
+					if(scanArray[x][y])
+						trueCounter++;
+				}
+			try {
+				composition[0][y*2 + 1] = noteArray[trueCounter];
+				composition[1][y*2] = trueCounter * 100;
+				trueCounter = 0;
+			}
+			catch(Exception e) {
+				System.out.println("FAILED SECOND");
+			}
 		}
-
-
-		// Generate duration for composition array
-
-
 	}
 
 	private void generateMajorFrygian() {
@@ -128,6 +135,7 @@ public class MusicState implements State {
 	public static void test(){
 		generateTones();
 		bullshitScanArray();
+		generateAllToneBonanza();
 		while(Button.ESCAPE.isUp()) {
 			for(int i = 0; i < composition[0].length; i++)
 			{
