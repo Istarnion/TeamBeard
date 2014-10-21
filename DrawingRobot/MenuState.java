@@ -39,15 +39,25 @@ public class MenuState implements State {
 			if(Button.ENTER.isDown()){
 				Button.ENTER.waitForPressAndRelease();
 				switch(currOption){
+					
 					case COPY:
 					//sam.push(new CopyState());
+					LCD.clearDisplay();
+					drawMenu();
 					break;
+					
 					case MUSIC:
-					sam.push(new MusicState());
+					sam.push(new MusicState(sam));
+					LCD.clearDisplay();
+					drawMenu();
 					break;
+					
 					case DRAW:
 					//sam.push(new DrawState());
+					LCD.clearDisplay();
+					drawMenu();
 					break;
+					
 					case CANCEL:
 					System.exit(0);
 					break;
@@ -96,7 +106,6 @@ public class MenuState implements State {
 		}
 	}
 	public void resume() {
-		
 	}
 	
 }
