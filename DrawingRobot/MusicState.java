@@ -2,7 +2,7 @@ import lejos.nxt.*;
 import java.util.Random;
 /**
  * Music State!
- * This class contains methods for making music from a 2dimensional boolean array
+ * This class contains the magic that makes the music!
  * 
  * @author Ole Jørgen Skogstad
  */
@@ -115,11 +115,14 @@ public class MusicState implements State, MenuListener {
 			generateMinorHarmonic();
 
 			case RESCAN:
+			LCD.clearDisplay();
+			System.out.println("Scanning!");
 			scanArray = robot.scan();
+			LCD.clearDisplay();
 			break;
 
 			case CANCEL:
-			return;
+			menu.exit();
 		}
 	}
 

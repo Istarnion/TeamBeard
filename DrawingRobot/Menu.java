@@ -5,6 +5,7 @@ class Menu {
 	private int currOption = 0;
 	private MenuListener menuListener;
 	private String[] menuItems;
+	private boolean exit;
 	
 	public Menu(String[] mi, MenuListener ml) {
 		menuItems = mi;
@@ -25,7 +26,7 @@ class Menu {
 
 	public void init() {
 		drawMenu();
-		while(Button.ESCAPE.isUp()) {
+		while(Button.ESCAPE.isUp() || !exit) {
 			Thread.yield();
 			if(Button.ENTER.isDown()) {
 				Button.ENTER.waitForPressAndRelease();
@@ -45,5 +46,9 @@ class Menu {
 				drawMenu();
 			}
 		}
+	}
+
+	public void exit() {
+		exit = true;
 	}
 }
