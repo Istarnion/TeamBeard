@@ -22,9 +22,11 @@ class MusicPlayer {
 				System.out.println("Something went wrong, very very wrong. RUN!");
 			}
 
-			int progress = (i* (100/composition[0].length));
+			// Progress bar!
+			int progress = (int)(i* (100.0/(double)composition[0].length));
+			LCD.drawString(progress + "%", 0, 2);
 			for(int x=0; x<10; x++) {
-				LCD.setPixel(progress, 55+x, 1);
+				LCD.setPixel(progress, 25+x, 1);
 			}
 		}				
 	}
