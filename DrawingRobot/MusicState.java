@@ -7,26 +7,35 @@ import java.util.Random;
  * @author Ole Jørgen Skogstad
  */
 
+/**
+*
+*
+*
+*/
 public class MusicState implements State, MenuListener {
+	//
 	StateMachine sam;
+	//
 	private Menu menu;
+	//
 	private static final String CHROMATIC="Chromatic", MAJOR="Major lydian", MINOR="Minor harmonic", RESCAN="Rescan", CANCEL="Cancel";
+	//
 	private int[] noteArray = new int[25];
+	//
 	private int[] scaleArray;
-	private int[][] composition = new int[2][130];
-	//private static boolean[][] scanArray;
+	//
+	private int[][] composition = new int[2][128];
+	//
+	//private boolean[][] scanArray = new ;
+	//
+	private short[][] scanArrayConverted = new short[8][8];
+	//
 	private Robot robot;
+	//
 	private static final double MUSIC_CONSTANT = 1.05946309436;
 	
 	
-	/**
-	 * Constructor for the music state. Retrieves a robot object!
-	 */
-	public MusicState(StateMachine sam) {
-		robot = Robot.getInstance();
-		this.sam = sam;
-	}
-
+// UGLY TEMP ARRAJ, SHALL BE PURGD IN HELFIREZ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	private boolean[][] scanArray = { 
 		{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, },
 		{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, },
@@ -92,9 +101,18 @@ public class MusicState implements State, MenuListener {
 		{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, },
 		{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, },
 		{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, },
-		{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, },
-};
+		{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, },};
 
+
+
+
+	/**
+	 * Constructor for the music state. Retrieves a robot object!
+	 */
+	public MusicState(StateMachine sam) {
+		robot = Robot.getInstance();
+		this.sam = sam;
+	}
 
 	/**
 	*
@@ -127,16 +145,17 @@ public class MusicState implements State, MenuListener {
 		}
 	}
 
-
 	/**
 	*
 	*
 	*
 	*/
+	// ----------------------------------------------------------------------------------REMEMBARR REMOV COMENT
 	@Override
 	public void init() {
 		LCD.clearDisplay();
 		menu = new Menu(new String[] {CHROMATIC, MAJOR, MINOR, RESCAN, CANCEL}, this);
+		LCD.drawString("Scanning! Please wait ...", 2, 2, false);
 		//scanArray = robot.scan();
 		generateTones();
 		menu.init();
@@ -145,11 +164,12 @@ public class MusicState implements State, MenuListener {
 	*
 	*
 	*/
+	
 	@Override
 	public void resume() {
 	}
 
-	/** Method for creating notes for noteArray, by the function 
+	/** Method for creating note frequencies for noteArray, by the function 
 	*	f(n) = 12th-rt(2)^(n-49) * 440
 	*	where 440 is the note A4, and n is the n-th key on a 88-key piano.
 	*	Read more about this on <a href="http://en.wikipedia.org/wiki/Piano_key_frequencies">Wikipedia (Piano key frequencies</a>
@@ -161,33 +181,9 @@ public class MusicState implements State, MenuListener {
 		}
 	}
 
-	
+	// Generate music!
 	private void generateMusic() {
-		// Generates frequency and duration for composition array
-		// First for loop goes through the rows of the scanArray (y-axis)
-		for(int y = 0; y < scanArray[0].length; y++) {
-			int trueCounter = 0;
-			// First nested for loop goes through the first half of the row
-			// Count the number of "true", this amount will be used to chose a note from the scaleArray
-				for(int x = 0; x < (scanArray.length / 2); x++) {
-					if(scanArray[x][y])
-						trueCounter++;
-				}
 			
-				composition[0][y*2] = scaleArray[trueCounter];
-				composition[1][y*2+1] = trueCounter * 40;
-				trueCounter = 0;
-			
-				// Second nesten for loop goes through the second half of the row
-				for(int x = (scanArray.length / 2); x < scanArray.length; x++) {
-					if(scanArray[x][y])
-						trueCounter++;
-				}
-			
-				composition[0][y*2 + 1] = scaleArray[trueCounter];
-				composition[1][y*2] = trueCounter * 40;
-				trueCounter = 0;
-		}
 	}
 
 	// Creates a scaleArray equal to the original noteArray
@@ -197,6 +193,7 @@ public class MusicState implements State, MenuListener {
 		MusicPlayer.play(composition);
 		menu.drawMenu();
 	}
+	
 	// Creates a scaleArray with notes from the C major lydian scale
 	private void generateMajorLydian() {
 		scaleArray = new int[] 
