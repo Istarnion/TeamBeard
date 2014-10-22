@@ -27,16 +27,15 @@ class Bool2Byte {
 
 	private static short[] convert(boolean[] barray) {
 		if(barray.length>64) return null;
-		String s;
+		short total;
 		short[] output = new short[8];
 		int x = 0;
 		for(int i=0; i<8; i++) {
-			s = "";
+			total = 0;
 			for(int j=0; j<8; j++) {
-				s = s+(barray[i*8+j]?"1":"0");
-				System.out.print(" "+barray[i*8+j]);
+				total += ((barray[i*8+j]?1:0)<<i);
 			}
-			output[i] = Short.parseShort(s, 2);
+			output[i] = total;
 			System.out.println(output[i]);
 		}
 		return output;
