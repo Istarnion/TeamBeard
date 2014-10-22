@@ -25,7 +25,7 @@ public class DrawPanel extends JPanel {
 	
 	public DrawPanel(int w, int h) {
 		super.setPreferredSize(new Dimension(w, h));
-		img = new BufferedImage(42, 65, BufferedImage.TYPE_INT_RGB);
+		img = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
 		
 		barray = new boolean[img.getWidth()][img.getHeight()];
 		

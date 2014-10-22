@@ -6,7 +6,7 @@ public class GUI {
 	
 	public GUI() {
 		JFrame frame = new JFrame("Drawing");
-		frame.add(new DrawPanel(462, 715));
+		frame.add(new DrawPanel(704, 704));
 		
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
