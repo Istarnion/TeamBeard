@@ -119,6 +119,7 @@ public class MusicState implements State, MenuListener {
 			System.out.println("Scanning!");
 			scanArray = robot.scan();
 			LCD.clearDisplay();
+			menu.drawMenu();
 			break;
 
 			case CANCEL:

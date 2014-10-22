@@ -26,7 +26,7 @@ class Menu {
 
 	public void init() {
 		drawMenu();
-		while(Button.ESCAPE.isUp() || !exit) {
+		while(Button.ESCAPE.isUp() && !exit) {
 			Thread.yield();
 			if(Button.ENTER.isDown()) {
 				Button.ENTER.waitForPressAndRelease();
