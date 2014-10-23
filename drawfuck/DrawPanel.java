@@ -117,6 +117,7 @@ public class DrawPanel extends JPanel {
 		
 		@Override
 		public void mouseDragged(MouseEvent me) {
+			me.get
 			client.handleMouseThing(me.getX(), me.getY());
 		}
 		

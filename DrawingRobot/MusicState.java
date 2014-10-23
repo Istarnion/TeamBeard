@@ -1,17 +1,12 @@
 import lejos.nxt.*;
 import java.util.Random;
+
 /**
  * Music State!
  * This class contains the magic that makes the music!
  * 
  * @author Ole Jørgen Skogstad
  */
-
-/**
-*
-*
-*
-*/
 public class MusicState implements State, MenuListener {
 	//
 	StateMachine sam;
@@ -108,6 +103,8 @@ public class MusicState implements State, MenuListener {
 
 	/**
 	 * Constructor for the music state. Retrieves a robot object!
+	 *
+	 *@param sam An instance of the statemachine in use, so objects of MusicState can manipulate the State stack
 	 */
 	public MusicState(StateMachine sam) {
 		robot = Robot.getInstance();
@@ -218,6 +215,41 @@ public class MusicState implements State, MenuListener {
 		generateMusic();
 		MusicPlayer.play(composition);
 		menu.drawMenu();
-	}		
+	}
+
+	/**
+	*	Conversion between a boolean array to a short array.
+	*	We use short and not byte, since byte is signed, so theres only seven bits to the actual value.
+	*	
+	*	@param barray The boolean array that shall be converted. Its length should be dividable by 8.
+	*/
+	public static short[] convertBoolToShort(boolean[] barray) {
+		if(barray.length<8) return null;
+		short[] output = new short[(int)(barray.length/8)];	// Makes an array of apropriate length. e.g. length 64 gives an array of length 8
+
+		short total = 0;
+		for(byte b=0; b<output.length; b++) {
+			total = 0;
+			for(byte c=0; c<8; c++) {	// 8 bits per value.
+				total += ((barray[b*8+c]?1:0)<<b);	// Adds the bit to the apropriate location in the bit pattern.
+			}
+			output[b] = total;
+		}
+		return output;
+	}
+
+	// Extracts the to bits used to determine the length of the note
+	// Returns a byte to save memory and speed.
+	// value 0 - 4 (exlusive)
+	private byte getNoteLengthBits(short s) {
+		return (byte)(s>>6);
+	}
+
+	// Extracts the last six bits of a short.
+	// Returns a byte to save memory and speed.
+	// Value 0 - 64(exlusive)
+	private byte getNoteLeapBits(short s) {
+		return (byte)(s & ~(3<<6));
+	}
 }
 

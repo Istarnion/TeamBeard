@@ -21,13 +21,13 @@ public class Robot
 	private int degreesPerUnit;
 	
 	//The maximum positions of the x-axis, in pixels.
-	private final static int X_POS_MAX = 64;
+	public final static int X_POS_MAX = 64;
 	
 	// The printer heads current position on the x-axis 
 	private int xPos;
 	
 	//The maximum positions of the y-axis, in pixels.
-	private final static int Y_POS_MAX = 64;
+	public final static int Y_POS_MAX = 64;
 
 	// The printer heads current position on the y-axis 
 	private int yPos;
