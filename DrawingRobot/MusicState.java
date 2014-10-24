@@ -1,11 +1,7 @@
 import lejos.nxt.*;
 import java.util.Random;
 
-<<<<<<< HEAD
-/** c
-=======
-/** a
->>>>>>> 3afcb7b8ba0b28850a9f3cdc1ddc0e8cc78e5437
+/**
  * Music State!
  * This class contains the magic that makes the music!
  * 
@@ -186,11 +182,15 @@ public class MusicState implements State, MenuListener {
 	// Generate music!
 	private void generateMusic() {
 		scanArrayConverted = convertBool2DToShort2D(scanArray);
-		int noteLength;
-		int noteLeap;
-		int lastNote = 11;
+		int noteLength; // stores the int that is returned from getNoteLength()
+		int indexOfLeaps; // stores the int that is returned from getNoteLeapBits()
+		int lastLeap; // Keeps a track of what the last leap was
+		int leapRepeatCounter; // Counts how many times a leap has been repeated
+		int lastNote = 11; // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
+		
+		// Check what int getNoteLengthBits returns and set the frequency of the note
 		for(int i = 0; i < scanArrayConverted.length; i++) {
-			noteLength = getNoteLengthBits(scanArrayConverted[i]); // get next note length
+			noteLength = getNoteLengthBits(scanArrayConverted[i]);
 			switch(noteLength) {
 					case 0:
 					composition[1][i] = 1000;
@@ -209,52 +209,81 @@ public class MusicState implements State, MenuListener {
 					break;
 			}
 
-			noteLeap = getNoteLeapBits(scanArrayConverted[i]); // get next note leap
-				if(noteLeap > 5) {
-					composition[0][i] = scaleArray[lastNote + 1]; //makes a second leap up
+			// Check what int getNoteLeapBits returns and set the note leap
+			indexOfLeaps = getNoteLeapBits(scanArrayConverted[i]); //
+			int leap;
+				if(indexOfLeaps > 5) {
+					leap 		= 1; //makes a second leap up
+					lastLeap 	= 1; //
 				}
-				else if(noteLeap > 10) {
-					composition[0][i] = scaleArray[lastNote - 1]; // makes a second leap down
+				else if(indexOfLeaps > 10) {
+					leap 		= -1; // makes a second leap down
+					lastLeap 	= -1; // 
 				}
-				else if(noteLeap > 15) {
-					composition[0][i] = scaleArray[lastNote + 2]; // makes a third leap up
+				else if(indexOfLeaps > 15) {
+					leap 		= 2;// makes a third leap up
+					lastLeap 	= 2; //
 				}
-				else if(noteLeap > 20) {
-					composition[0][i] = scaleArray[lastNote - 2]; // makes a third leap down
+				else if(indexOfLeaps > 20) {
+					leap 		= -2; // makes a third leap down
 				}
-				else if(noteLeap > 25) {
-					composition[0][i] = scaleArray[lastNote + 4]; // makes a fifth leap up
+				else if(indexOfLeaps > 25) {
+					leap 		= 4; // makes a fifth leap up
+					lastLeap	= 4; //
 				}
-				else if(noteLeap > 30) {
-					composition[0][i] = scaleArray[lastNote - 4]; // makes a fifth leap down
+				else if(indexOfLeaps > 30) {
+					leap 		= -4; // makes a fifth leap down
+					lastLeap	= -4; //
 				}
-				else if(noteLeap > 35) {
-					composition[0][i] = scaleArray[lastNote + 5]; // makes a sixth leap up
+				else if(indexOfLeaps > 35) {
+					leap 		= 5; // makes a sixth leap up
+					lastLeap	= 5; //
 				}
-				else if(noteLeap > 40) {
-					composition[0][i] = scaleArray[lastNote - 5]; // makes a sixth leap down
+				else if(indexOfLeaps > 40) {
+					leap 		= -5; // makes a sixth leap down
+					lastLeap	= -5; //
 				}
-				else if(noteLeap > 44) {
-					composition[0][i] = scaleArray[lastNote + 3]; // makes a fourth leap up
+				else if(indexOfLeaps > 44) {
+					leap 		= 3; // makes a fourth leap up
+					lastLeap	= 3; //
 				}
-				else if(noteLeap > 48) {
-					composition[0][i] = scaleArray[lastNote - 3]; // makes a fourth leap down
+				else if(indexOfLeaps > 48) {
+					leap 		= -3; // makes a fourth leap down
+					lastLeap	= -3; //
 				}
-				else if(noteLeap > 52) {
-					composition[0][i] = scaleArray[lastNote + 7]; // makes a octave leap up
+				else if(indexOfLeaps > 52) {
+					leap 		= 7; // makes a octave leap up
+					lastLeap 	= 7; //
 				}
-				else if(noteLeap > 56) {
-					composition[0][i] = scaleArray[lastNote - 7]; // makes a octave leap down
+				else if(indexOfLeaps > 56) {
+					leap 		= -7; // makes a octave leap down
+					lastLeap 	= -7; //
 				}
-				else if(noteLeap > 59) {
-					composition[0][i] = scaleArray[lastNote + 6]; // makes a sept leap up
+				else if(indexOfLeaps > 59) {
+					leap 		= 6; // makes a sept leap up
+					lastLeap 	= 6; // 
 				}
-				else if(noteLeap > 62) {
-					composition[0][i] = scaleArray[lastNote - 6]; // makes a sept leap down
+				else if(indexOfLeaps > 62) {
+					leap 		= -6; // makes a sept leap down
+					lastLeap 	= -6; // 
 				}
 				else {
-					composition[0][i] = scaleArray[lastNote]; // makes a second leap down
+					leap 		= 0; // makes a second leap down
+					lastLeap 	= 0; //
 				}
+
+				if(leap==lastLeap)
+
+				// Checks if the leap goes out of bounds for the scaleArray. 
+				// Changes direction of leap if out of bounds.
+				if((lastNote + leap) > 0 && lastNote + leap < scaleArray.length) {
+					composition[0][i] = scaleArray[lastNote + leap];
+				}d
+				else {
+					composition[0][i] = scaleArray[lastNote - leap];
+				}
+					
+
 		}
 	}
 
@@ -307,7 +336,6 @@ public class MusicState implements State, MenuListener {
 				total += ((barray[b*8+c]?1:0)<<c);	// Adds the bit to the apropriate location in the bit pattern.
 			}
 			output[b] = total;
-			System.out.println(total);
 		}
 		return output;
 	}
