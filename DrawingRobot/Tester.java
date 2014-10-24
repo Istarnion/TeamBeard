@@ -3,11 +3,12 @@ import lejos.nxt.*;
 class Tester {
 
 	public static void main(String[] main) throws Exception {
-		for(int i=0; i<64; i++) {
-			Motor.B.rotate(7);
+		Robot robot = Robot.getInstance();
+		sleep(100);
+		while(Button.ENTER.isUp()) {
+			System.out.println(robot.readValue());
+			sleep(750);
 		}
-
-		sleep(3500);
 	}
 
 	private static void sleep(int i) {
