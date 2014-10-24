@@ -1,7 +1,11 @@
 import lejos.nxt.*;
 import java.util.Random;
 
+<<<<<<< HEAD
 /** c
+=======
+/** a
+>>>>>>> 3afcb7b8ba0b28850a9f3cdc1ddc0e8cc78e5437
  * Music State!
  * This class contains the magic that makes the music!
  * 
