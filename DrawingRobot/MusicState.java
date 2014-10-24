@@ -1,5 +1,6 @@
 import lejos.nxt.*;
 import java.util.Random;
+import java.util.ArrayList;
 
 <<<<<<< HEAD
 /** c
@@ -182,12 +183,14 @@ public class MusicState implements State, MenuListener {
 	*	
 	*	@param barray The two dimensional boolean array that shall be converted.
 	*/
-	public static short[][] convertBool2DToShort2D(boolean[][] barray) {
-		short[][] sarray = new short[barray[0].length][barray.length/8];
+	public static short[] convertBool2DToShort2D(boolean[][] barray) {
+		ArrayList<short> list = new ArrayList<short>(barray[0].length*barray.length/8);
 		for(byte b=0; b<barray[0].length; b++) {
-			sarray[b] = convertBoolToShort(barray[b]);
+			for(short s : convertBoolToShort(barray[b]) {
+				list.add(s);
+			}
 		}
-		return sarray;
+		return list.toArray();
 	}
 
 	// Extracts the to bits used to determine the length of the note
