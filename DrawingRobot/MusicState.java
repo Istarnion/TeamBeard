@@ -351,7 +351,7 @@ public class MusicState implements State, MenuListener {
 		for(byte b=0; b<barray.length; b++) {
 			s = convertBoolToShort(barray[b]);
 			for(byte c=0; c<barray[0].length/8; c++) {
-				sarray[c*(barray[0].length/8)+c] = s[c]; 
+				sarray[c*64+b] = s[c];
 			}
 		}
 		return sarray;
