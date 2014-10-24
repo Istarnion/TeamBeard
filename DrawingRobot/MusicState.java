@@ -238,6 +238,19 @@ public class MusicState implements State, MenuListener {
 		return output;
 	}
 
+	/**
+	*	Conversion between a two dimensianal boolean array to a two dimensional short array
+	*	
+	*	@param barray The two dimensional boolean array that shall be converted.
+	*/
+	public static short[][] convertBool2DToShort2D(boolean[][] barray) {
+		short[][] sarray = new short[barray[0].length][barray.length/8];
+		for(byte b=0; b<barray[0].length; b++) {
+			sarray[b] = convertBoolToShort(barray[b]);
+		}
+		return sarray;
+	}
+
 	// Extracts the to bits used to determine the length of the note
 	// Returns a byte to save memory and speed.
 	// value 0 - 4 (exlusive)
