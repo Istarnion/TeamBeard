@@ -41,6 +41,7 @@ public class DrawPanel extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_S && e.isControlDown() && !saving) saveFile();
+				if(e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) invert();
 			}
 
 			@Override
@@ -60,7 +61,7 @@ public class DrawPanel extends JPanel {
 		Graphics2D imgGraphics = img.createGraphics();
 		for(int x=0; x<img.getWidth(); x++) {
 			for(int y=0; y<img.getHeight(); y++) {
-				if(barray[x][y]) imgGraphics.setColor(Color.black);
+				if(barray[x][y]) imgGraphics.setColor(Color.BLACK);
 				else imgGraphics.setColor(Color.WHITE);
 				imgGraphics.fillRect(x, y, 1, 1);
 			}
@@ -69,6 +70,15 @@ public class DrawPanel extends JPanel {
 		g.drawImage(img, 0, 0, super.getWidth(), super.getHeight(), null);
 	}
 	
+	private void invert() {
+		for(int i=0; i<barray.length; i++) {
+			for(int j=0; j<barray[0].length; j++) {
+				barray[i][j] = !barray[i][j];
+			}
+		}
+		repaint();
+	}
+
 	public void handleMouseThing(double x, double y) {
 		int posx = (int)((x-pxWidth/2)/pxWidth);
 		int posy = (int)((y-pxHeight/2)/pxHeight);
@@ -85,25 +95,7 @@ public class DrawPanel extends JPanel {
 	
 	private void saveFile() {
 		saving = true;
-		String output = "private boolean[][] scanArray = { \n";
-		for(int i=0; i<barray[0].length; i++) {
-			output = output.concat("{");
-			for(int j=0; j<barray.length; j++) {
-				output = output.concat((barray[j][i]?"true":"false")+", ");
-			}
-			output = output.concat("},\n");
-		}
-		output = output.concat("\n};");
-		
-		try {
-			PrintWriter writer = new PrintWriter("drawing.txt", "UTF-8");
-			writer.print(output);
-			writer.close();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
-		
+		FileSaver.saveFile(barray);
 		saving = false;
 	}
 	
