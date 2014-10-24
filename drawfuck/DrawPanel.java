@@ -42,6 +42,7 @@ public class DrawPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_S && e.isControlDown() && !saving) saveFile();
 				if(e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) invert();
+				if(e.getKeyCode() == KeyEvent.VK_R && e.isControlDown()) clear();
 			}
 
 			@Override
@@ -74,6 +75,15 @@ public class DrawPanel extends JPanel {
 		for(int i=0; i<barray.length; i++) {
 			for(int j=0; j<barray[0].length; j++) {
 				barray[i][j] = !barray[i][j];
+			}
+		}
+		repaint();
+	}
+
+	private void clear() {
+		for(int i=0; i<barray.length; i++) {
+			for(int j=0; j<barray[0].length; j++) {
+				barray[i][j] = false;
 			}
 		}
 		repaint();
