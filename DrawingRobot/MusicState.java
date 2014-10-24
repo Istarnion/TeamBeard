@@ -1,6 +1,5 @@
 import lejos.nxt.*;
 import java.util.Random;
-import java.util.ArrayList;
 
 <<<<<<< HEAD
 /** c
@@ -171,9 +170,10 @@ public class MusicState implements State, MenuListener {
 		for(byte b=0; b<output.length; b++) {
 			total = 0;
 			for(byte c=0; c<8; c++) {	// 8 bits per value.
-				total += ((barray[b*8+c]?1:0)<<b);	// Adds the bit to the apropriate location in the bit pattern.
+				total += ((barray[b*8+c]?1:0)<<c);	// Adds the bit to the apropriate location in the bit pattern.
 			}
 			output[b] = total;
+			System.out.println(total);
 		}
 		return output;
 	}
@@ -184,26 +184,28 @@ public class MusicState implements State, MenuListener {
 	*	@param barray The two dimensional boolean array that shall be converted.
 	*/
 	public static short[] convertBool2DToShort2D(boolean[][] barray) {
-		ArrayList<short> list = new ArrayList<short>(barray[0].length*barray.length/8);
-		for(byte b=0; b<barray[0].length; b++) {
-			for(short s : convertBoolToShort(barray[b]) {
-				list.add(s);
+		short[] sarray = new short[barray.length * (barray[0].length/8)];
+		short[] s;
+		for(byte b=0; b<barray.length; b++) {
+			s = convertBoolToShort(barray[b]);
+			for(byte c=0; c<barray[0].length/8; c++) {
+				sarray[c*(barray[0].length/8)+c] = s[c]; 
 			}
 		}
-		return list.toArray();
+		return sarray;
 	}
 
 	// Extracts the to bits used to determine the length of the note
 	// Returns a byte to save memory and speed.
 	// value 0 - 4 (exlusive)
-	private byte getNoteLengthBits(short s) {
+	private static byte getNoteLengthBits(short s) {
 		return (byte)(s>>6);
 	}
 
 	// Extracts the last six bits of a short.
 	// Returns a byte to save memory and speed.
 	// Value 0 - 64(exlusive)
-	private byte getNoteLeapBits(short s) {
+	private static byte getNoteLeapBits(short s) {
 		return (byte)(s & ~(3<<6));
 	}
 }
