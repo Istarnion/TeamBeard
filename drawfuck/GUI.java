@@ -1,13 +1,17 @@
-
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class GUI {
-
 	
 	public GUI() {
-		JFrame frame = new JFrame("Drawing");
-		frame.add(new DrawPanel(704, 704));
-		
+		JFrame frame = new JFrame("DRAWDUCK");
+		JPanel container = new JPanel();
+		container.add(new OptionPanel(704));
+		container.add(new DrawPanel(704, 704));
+		container.add(new ComunicatorPanel(704));
+
+		frame.add(container);
+
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

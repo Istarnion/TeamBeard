@@ -14,17 +14,7 @@ public class CopyState implements State
 
 	boolean[][] drawing;
 
-	public void init() {}
-
-	public void resume() {}
-
-
-	/**
-	 * 
-	 * 
-	 * 
-	 */
-	public CopyState(){
+	public void init() {
 
 		robot = robot.getInstance();
 		drawing = robot.scan();
@@ -45,10 +35,23 @@ public class CopyState implements State
 					robot.setMarker(false);
 				}
 				x++;
+				robot.setXPos(0);
 			}
-			robot.setXPos(0);
 			y++;
+			robot.setYPos(0);
 		}
+	}
+
+	public void resume() {}
+
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public CopyState(){
+
 
 /*		if 
 

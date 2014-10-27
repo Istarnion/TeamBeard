@@ -1,18 +1,21 @@
 import lejos.nxt.*;
 
-/**
+/** Robot.java
+ * This class handles all comunication with hardware such as motors and sensors,
+ * to serve as an abstraction between the robot and our algorithms.
+ * We have designed this class with the singelton design pattern, as described by
+ * [Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides (1994), "Design Patterns: Elements of Reusable Object-Oriented Software", Pearson Education]
  * 
- * 
- * 
+ * @author TeamBeard
  */
 public class Robot {
-	//
+	// The singelton instance. See getInstance()
 	private static Robot singleton;
 	
-	//
+	// The Motor that moves the read/write head on the x-axis
 	private NXTRegulatedMotor xAxis;
 	
-	//
+	// The motor that moves the read/write head on the y-axis
 	private NXTRegulatedMotor yAxis;
 	
 	//	How many millis the motors need to go per 'pixel'
@@ -42,7 +45,7 @@ public class Robot {
 	// The light trigger value. Lower value see more stuff as light.
 	private static final int LIGHT_TRIGGER_VALUE = 550;
 
-	// Robo Contruction site
+	// Private constructor. See below.
 	private Robot(){
 		xAxis 		= Motor.B;
 		yAxis 		= Motor.A;
@@ -59,10 +62,13 @@ public class Robot {
 	}
 
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
+	 * This is the singelton program design pattern.
+	 * We want one and only one instance of the robot class to
+	 * avoid conflict of motor control and such.
+	 * We achieve this by keeping the constructor private,
+	 * and only use it here in this method.
+	 * We use lazy initialization. This means that we don't create
+	 * an instance if we are not asked for it.
 	 */
 	public static Robot getInstance() {
 		if(singleton==null)
@@ -73,20 +79,14 @@ public class Robot {
 	}
 	
 	/**
-	 * Returns the printer heads current position on the x-axis
-	 * 
-	 * 
-	 * 
+	 * @return The printer head current position on the y-axis
 	 */
 	public int getXPos() {
 		return xPos;	
 	}
 	
 	/**
-	 * Moves the printer head to a specified point on the x-axis
-	 * 
-	 * 
-	 * 
+	 * @param The position on the x-axis to where the printer head should go.
 	 */
 	public void setXPos(int xPos) {
 		int x = xPos;
@@ -119,20 +119,14 @@ public class Robot {
 	}
 	
 	/**
-	 * Returns the printer heads current position on the y-axis
-	 * 
-	 * 
-	 * 
+	 * @return The printer head current position on the y-axis
 	 */
 	public int getYPos() {
 		return yPos;	
 	}
 	
 	/**
-	 * Moved the printer head to a specified point on the y-axis
-	 * 
-	 * 
-	 * 
+	 * @param The position on the y-axis to where the printer head should go.
 	 */
 	public void setYPos(int yPos) {
 		int y = yPos;
@@ -164,20 +158,14 @@ public class Robot {
 	}
 	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
+	 * @param true sets the marker down, false lifts it up.
 	 */
 	public void setMarker(boolean down) {
 		marker.rotateTo(down?30:0);
 	}
 	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
+	 * Toggles the marker. If it is currently up, we move it down, and vice versa.
 	 */
 	public void toggleMarker() {
 		marker.rotateTo(isDown?0:30);
@@ -185,9 +173,6 @@ public class Robot {
 	}
 
 	/**
-	 * 
-	 * 
-	 * 
 	 * @return True if dark, False if light
 	 */
 	 public boolean readValue() {
@@ -195,10 +180,10 @@ public class Robot {
 	 }	
 
 	/**
+	 * While scanning, the thread is blocked. Scanning takes several minutes,
+	 * as the read/write head moves over the surface.
 	 * 
-	 * 
-	 * 
-	 * 
+	 * @return a two dimensional boolean array where false is a white pixel and true is dark.
 	 */
 	public boolean[][] scan() {
 		boolean[][] output = new boolean[X_POS_MAX][Y_POS_MAX];
