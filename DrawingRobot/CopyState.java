@@ -28,8 +28,8 @@ public class CopyState implements State
 		int x = 0;
 		int y = 0;
 
-		while (robot.getYPos() <= robot.Y_POS_MAX) {
-			while (robot.getXPos() <= robot.X_POS_MAX) {
+		while (robot.getYPos() < robot.Y_POS_MAX) {
+			while (robot.getXPos() < robot.X_POS_MAX) {
 				if (drawing[x][y] == true) {
 					robot.setMarker(true);
 					robot.setMarker(false);

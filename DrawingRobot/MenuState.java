@@ -30,7 +30,7 @@ public class MenuState implements State, MenuListener {
 	public void onMenuEvent(String menuItem){
 		switch (menuItem){
 			case COPY:
-			//sam.push(new CopyState());
+			sam.push(new CopyState());
 			break;
 
 			case MUSIC:
