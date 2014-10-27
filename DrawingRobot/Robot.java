@@ -186,9 +186,18 @@ public class Robot {
 	 * @return a two dimensional boolean array where false is a white pixel and true is dark.
 	 */
 	public boolean[][] scan() {
+		LCD.clear();
+		LCD.drawString("Scanning...", 1,1,false);
 		boolean[][] output = new boolean[X_POS_MAX][Y_POS_MAX];
 		byte c;
 		for(byte b=0; b<Y_POS_MAX; b++) {
+			// Progress bar!
+			byte progress = (byte)(b* (100.0/(double)Y_POS_MAX));
+			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
+			for(byte y=0; y<10; y++) {
+				LCD.setPixel(progress, 25+y, 1);
+			}
+
 			setYPos(b);
 			for(c=0; c<X_POS_MAX; c++) {
 				setXPos(c);
