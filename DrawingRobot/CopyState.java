@@ -7,8 +7,9 @@ import lejos.nxt.*;
  * 
  */
 
-public class CopyState implements State
-{
+public class CopyState implements State {
+
+	private Menu menu;
 
 	Robot robot;
 
@@ -19,7 +20,8 @@ public class CopyState implements State
 		robot = robot.getInstance();
 		drawing = robot.scan();
 
-		System.out.println("Insert copy paper");
+		LCD.clear();
+		LCD.drawString("Insert copy paper",1,1,false);
 
 		Button.ENTER.waitForPressAndRelease();
 
@@ -27,6 +29,9 @@ public class CopyState implements State
 		robot.setYPos(0);
 		int x = 0;
 		int y = 0;
+
+		LCD.clear();
+		LCD.drawString("Printing...",1,1,false);
 
 		while (robot.getYPos() < robot.Y_POS_MAX) {
 			while (robot.getXPos() < robot.X_POS_MAX) {
@@ -40,6 +45,7 @@ public class CopyState implements State
 			y++;
 			robot.setYPos(0);
 		}
+		menu.drawMenu();
 	}
 
 	public void resume() {}
@@ -50,7 +56,9 @@ public class CopyState implements State
 	 * 
 	 * 
 	 */
-	public CopyState(){
+	public CopyState(Menu menu){
+		this.menu=menu;
+		init();
 
 
 /*		if 
