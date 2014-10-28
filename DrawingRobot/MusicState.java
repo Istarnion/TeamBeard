@@ -7,9 +7,7 @@ import java.util.Random;
  * 
  * @author TeamBeard
  */
-public class MusicState implements State, MenuListener {
-	//
-	StateMachine sam;
+public class MusicState implements MenuListener {
 	//
 	private Menu menu;
 	//
@@ -32,11 +30,9 @@ public class MusicState implements State, MenuListener {
 	/**
 	 * Constructor for the music state. Retrieves a robot object!
 	 *
-	 *@param sam An instance of the statemachine in use, so objects of MusicState can manipulate the State stack
 	 */
-	public MusicState(StateMachine sam) {
+	public MusicState() {
 		robot = Robot.getInstance();
-		this.sam = sam;
 	}
 
 	/**
@@ -76,7 +72,6 @@ public class MusicState implements State, MenuListener {
 	*
 	*/
 	// ----------------------------------------------------------------------------------REMEMBARR REMOV COMENT
-	@Override
 	public void init() {
 		LCD.clearDisplay();
 		menu = new Menu(new String[] {CHROMATIC, MAJOR, MINOR, RESCAN, CANCEL}, this);
@@ -85,14 +80,6 @@ public class MusicState implements State, MenuListener {
 		scanArray = robot.scan();
 		generateTones();
 		menu.init();
-	}
-	/**
-	*
-	*
-	*/
-	
-	@Override
-	public void resume() {
 	}
 
 	/** Method for creating note frequencies for noteArray, by the function 

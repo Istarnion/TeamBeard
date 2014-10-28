@@ -8,50 +8,44 @@ import lejos.nxt.*;
  *  one menu to bring them all, and in darkness bind them.
  */
 
-public class MenuState implements State, MenuListener {
+public class MenuState implements MenuListener {
 	//options
-	private static final String COPY="Copy", MUSIC="Music Player", DRAW="Draw", CANCEL="Cancel";
+	private static final String COPY="Copy", MUSIC="Music Player", SLAVE="PC slave", CANCEL="Cancel";
 	private Menu menu;
 
-	private StateMachine sam;
 	/**
 	 * 
 	 * 
 	 * 
 	 */
-	public MenuState(StateMachine sam){
-		this.sam=sam;
-		
-		menu = new Menu(new String[] {COPY, MUSIC, DRAW, CANCEL}, this);
-
+	public MenuState(){
+		menu = new Menu(new String[] {COPY, MUSIC, SLAVE, CANCEL}, this);
 	}
 	
 	@Override
 	public void onMenuEvent(String menuItem){
 		switch (menuItem){
 			case COPY:
-			sam.push(new CopyState());
+				new CopyState().init();
 			break;
 
 			case MUSIC:
-			sam.push(new MusicState(sam));
+				new MusicState().init();
 			break;
 
-			case DRAW:
-			//sam.push(new DrawState());
+			case SLAVE:
+			//new DrawState();
 
 			case CANCEL:
-			System.exit(0);
+				System.exit(0);
 		}
+		menu.drawMenu();
 	}
 
-
-
-	@Override
 	public void init() {
-			menu.init();
-
+		menu.init();
 	}
+
 	public void resume() {
 	}
 	

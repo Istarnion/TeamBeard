@@ -187,7 +187,7 @@ public class Robot {
 	 */
 	public boolean[][] scan() {
 		LCD.clear();
-		LCD.drawString("Scanning...", 1,1,false);
+		LCD.drawString("Scanning...", 0,1,false);
 		boolean[][] output = new boolean[X_POS_MAX][Y_POS_MAX];
 		byte c;
 		for(byte b=0; b<Y_POS_MAX; b++) {
@@ -209,6 +209,8 @@ public class Robot {
 				}
 			}
 			b++;
+
+			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
 			setYPos(b);
 			for(c=X_POS_MAX-1; c>=0; c--) {
 				setXPos(c);

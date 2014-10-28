@@ -7,9 +7,7 @@ import lejos.nxt.*;
  * 
  */
 
-public class CopyState implements State {
-
-	private Menu menu;
+public class CopyState {
 
 	Robot robot;
 
@@ -45,7 +43,6 @@ public class CopyState implements State {
 			y++;
 			robot.setYPos(0);
 		}
-		menu.drawMenu();
 	}
 
 	public void resume() {}
@@ -56,9 +53,7 @@ public class CopyState implements State {
 	 * 
 	 * 
 	 */
-	public CopyState(Menu menu){
-		this.menu=menu;
-		init();
+	public CopyState() {
 
 
 /*		if 

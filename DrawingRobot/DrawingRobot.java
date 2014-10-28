@@ -4,27 +4,13 @@ import lejos.nxt.*;
  * 
  * <p>
  * The main class.
- * We just initializes the stateMachine, and 
+ * We just initializes the menuState
  */
 public class DrawingRobot
 {
-
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	private StateMachine stateMachine;
 	
-	/**
-	 * 
-	 * 
-	 * 
-	 */
 	public DrawingRobot(){
-		stateMachine = new StateMachine();
-		stateMachine.push(new MenuState(stateMachine));
+		new MenuState().init();
 	}
 
 	public static void main(String[] args) {
