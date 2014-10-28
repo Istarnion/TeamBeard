@@ -24,9 +24,22 @@ class ComunicatorPanel extends JPanel {
 						System.out.println("NXT: "+nxtInfo);
 						nxtComm.open(ni);
 						DataOutputStream dos = new DataOutputStream(nxtComm.getOutputStream());
-						dos.writeInt(56);
-						dos.flush();
-						nxtComm.close(ni);
+						do {
+							String s = JOptionPane.showInputDialog("Please input frequency");
+
+							if(s.equals("exit")) {
+								dos.writeInt(0);
+								dos.flush();
+								break;
+							}
+							else {
+								dos.writeInt(Integer.parseInt(s));
+								dos.flush();
+							}
+
+						}
+						while(true);
+						nxtComm.close();
 					}
 				}
 				catch(NXTCommException e) {

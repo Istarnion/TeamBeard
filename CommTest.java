@@ -18,8 +18,16 @@ class CommTest {
 		try {
 			LCD.drawString("Connected", 1, 4, false);
 			DataInputStream dis = connection.openDataInputStream();
-			LCD.drawString("Recieved: "+dis.readInt(), 1, 5, false);
-			sleep(5000);
+
+			// Reads int by int from the DataInputStream, and play the note of apropriate frequency.
+			for(int i=-1; i!=0; i=dis.readInt()) {
+				if(i>0){
+					Sound.playTone(i, 500);
+					sleep(500);
+				}
+			}
+
+			connection.close();
 		}
 		catch(IOException ioe) {
 			System.out.println("IO failure");
@@ -27,8 +35,9 @@ class CommTest {
 		catch(Exception ie) {
 			System.out.println("Failure");
 		}
-
-		sleep(5000);
+		finally {
+			sleep(5000);			
+		}
 	}
 
 	private static void sleep(int i) {
