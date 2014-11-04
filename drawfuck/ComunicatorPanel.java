@@ -19,7 +19,7 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 
 	private boolean connected = false;
 
-	private JButton connectButton, transferButton, disconnectButton;
+	private JButton connectButton, transferButton, disconnectButton, playButton, drawButton;
 
 	public ComunicatorPanel(int height, DrawPanel dp) {
 		this.dp = dp;
@@ -60,6 +60,18 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 		transferButton.addActionListener(this);
 		add(transferButton);
 
+		playButton = new JButton("Play");
+		playButton.setPreferredSize(new Dimension(140, 75));
+		playButton.setActionCommand("play");
+		playButton.addActionListener(this);
+		add(playButton);
+
+		drawButton = new JButton("Draw");
+		drawButton.setPreferredSize(new Dimension(140, 75));
+		drawButton.setActionCommand("draw");
+		drawButton.addActionListener(this);
+		add(drawButton);
+
 		disconnectButton = new JButton("Disconnect");
 		disconnectButton.setPreferredSize(new Dimension(140, 75));
 		disconnectButton.setActionCommand("disconnect");
@@ -68,7 +80,29 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 	}
 
 	private void transfer() {
-		boolean[][] dp.getBarray();
+		boolean[][] barray = dp.getBarray();
+
+		sendByte(TRANSFER);
+
+		for(int x=0; x<barray.length; x++) {
+			for(int y=0; y<barray[0].length; y++) {
+				try {
+					dos.writeBoolean(barray[x][y]);
+				}
+				catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private void sendByte(byte b) {
+		try {
+			dos.writeByte(b);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -95,9 +129,16 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 				}
 				break;
 			case "transfer":
+				transfer();
 				break;
 			case "disconnect":
 				disconnect();
+				break;
+			case "play":
+				sendByte(PLAY);
+				break;
+			case "draw":
+				sendByte(DRAW);
 				break;
 			default:
 				break;

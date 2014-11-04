@@ -225,4 +225,46 @@ public class Robot {
 
 		return output;
 	}
+
+	/**
+	 * While drawing, the thread is blocked. Drawing takes several minutes,
+	 * as the read/write head moves over the surface.
+	 */
+	public void draw(boolean[][] barray) {
+		LCD.clear();
+		LCD.drawString("Drawing...", 0,1,false);
+		byte c;
+		for(byte b=0; b<Y_POS_MAX; b++) {
+			// Progress bar!
+			byte progress = (byte)(b* (100.0/(double)Y_POS_MAX));
+			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
+			for(byte y=0; y<10; y++) {
+				LCD.setPixel(progress, 25+y, 1);
+			}
+
+			setYPos(b);
+			for(c=0; c<X_POS_MAX; c++) {
+				setXPos(c);
+				if(barray[c][c]) {
+					setMarker(true);
+				}
+				else {
+					setMarker(false);
+				}
+			}
+			b++;
+
+			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
+			setYPos(b);
+			for(c=X_POS_MAX-1; c>=0; c--) {
+				setXPos(c);
+				if(barray[b][c]) {
+					setMarker(true);
+				}
+				else {
+					setMarker(false);
+				}
+			}
+		}
+	}
 }
