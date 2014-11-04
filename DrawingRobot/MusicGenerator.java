@@ -1,5 +1,5 @@
 import java.util.Random;
-
+import lejos.nxt.*;
 
 class MusicGenerator {
 	private int[] noteArray = new int[25];
@@ -115,26 +115,49 @@ class MusicGenerator {
 			// Make a third leap
 			
 			else {
-				if(lastLeap != -3 && lastLeap == 3)
+				//insertPrintln("INDEX 63");
+				if(turnCounter > 2) {
 					if(random.nextInt(2) == 0) {
-						leap = 2;
+						leap = 1;
+						turnCounter = 0;
 					}
 					else {
-						leap = -2;
+						leap = -1;
+						turnCounter = 0;
 					}
-				else if(lastLeap == 2 && leapRepeatCounter > 2) {
-					leap = -2;
-					leapRepeatCounter = 0;
 				}
-				else if(lastLeap == -2 && leapRepeatCounter > 2) {
-					leap = 2;
-					leapRepeatCounter = 0;
-				}
-				else if(lastLeap == 2) {
-					leap = 2;
-				}
-				else if(lastLeap == -2) {
-					leap = -2;
+
+				else {
+
+					if(lastLeap != -2 && lastLeap != 2) {
+						if(random.nextInt(2) == 0) {
+							leap = 2;
+						}
+						else {
+							leap = -2;
+						}
+					}
+				
+					else if(lastLeap == 2 && leapRepeatCounter > 2) {
+						leap = -2;
+						leapRepeatCounter = 0;
+						turnCounter++;
+						//insertPrintln("turned down");
+					}
+					else if(lastLeap == -2 && leapRepeatCounter > 2) {
+						leap = 2;
+						leapRepeatCounter = 0;
+						turnCounter++;
+						//insertPrintln("turned up");
+					}
+					else if(lastLeap == 2) {
+						leap = 2;
+						//insertPrintln("going up");
+					}
+					else if(lastLeap == -2) {
+						leap = -2;
+						//insertPrintln("Going down");
+					}
 				}
 			}
 
@@ -147,7 +170,7 @@ class MusicGenerator {
 			else {
 				composition[0][i] = scaleArray[11];
 				lastLeap = 0;
-				lastNote = 11;
+				lastNote = random.nextInt(3) + 8;
 			}
 			
 			if(lastLeap == leap) {
@@ -248,5 +271,15 @@ class MusicGenerator {
 	// Value 0 - 64(exlusive)
 	private static byte getNoteLeapBits(short s) {
 		return (byte)(s & ~(3<<6));
+	}
+
+	private void insertPrintln(String output) {
+		System.out.println(output);
+		try{
+			Thread.sleep(1500);
+		}
+		catch(Exception e) {
+					
+		}
 	}
 }
