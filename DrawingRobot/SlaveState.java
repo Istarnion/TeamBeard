@@ -9,30 +9,35 @@ class SlaveState {
 	private MusicGenerator generator;
 
 	private final static byte
-		TRANSFER = 0,
-		PLAY = 1,
-		DRAW = 2,
-		DISCONNECT = 3;
+		TRANSFER 			= 0,
+		PLAY_LYDIAN 		= 1,
+		PLAY_HARMONIC 		= 2,
+		PLAY_CHROMATIC 		= 3,
+		DRAW 				= 4,
+		DISCONNECT 			= 5;
 
 	public SlaveState() {
+		LCD.clearDisplay();
+		System.out.println("Waiting for connection ...");
 		sourceArray = new boolean[64][64];
 		generator = new MusicGenerator();
+	
+		NXTConnection connection = Bluetooth.waitForConnection(60*1000, NXTConnection.PACKET);	// Timeout at 30s
 
-		NXTConnection connection = Bluetooth.waitForConnection(30*1000, NXTConnection.PACKET);	// Timeout at 30s
 
 		if(connection != null) {
 			try {
-				DataInputStream dis = connection.OpenDataInputStream();
+				DataInputStream dis = new DataInputStream(connection.openInputStream());
 
 				LCD.clear();
-				LCD.drawString("Waiting for BT input..");
+				LCD.drawString("Waiting for BT input..", 0, 2, false);
 
 				byte b = dis.readByte();
 				while(b != DISCONNECT) {
 					executeCommand(b, dis);
 
 					LCD.clear();
-					LCD.drawString("Waiting for BT input..");
+					LCD.drawString("Waiting for BT input..", 0, 2, false);
 
 					b = dis.readByte();
 				}
@@ -57,10 +62,20 @@ class SlaveState {
 						}
 					}
 				}
+				Sound.twoBeeps();
 				break;
-			case PLAY:
-				generator.generateMusic(sourceArray, "lydian");
+			case PLAY_LYDIAN:
+				generator.generateMajorLydian(sourceArray);
 				break;
+
+			case PLAY_HARMONIC:
+				generator.generateMinorHarmonic(sourceArray);
+				break;
+
+			case PLAY_CHROMATIC:
+				generator.generateChromatic(sourceArray);
+				break;
+
 			case DRAW:
 				Robot.getInstance().draw(sourceArray);
 				break;

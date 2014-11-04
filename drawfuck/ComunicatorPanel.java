@@ -8,9 +8,11 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 
 	private final static byte
 		TRANSFER = 0,
-		PLAY = 1,
-		DRAW = 2,
-		DISCONNECT = 3;
+		PLAY_LYDIAN = 1,
+		PLAY_HARMONIC = 2,
+		PLAY_CHROMATIC = 3,
+		DRAW = 4,
+		DISCONNECT = 5;
 
 	private NXTComm nxtComm;
 	private DrawPanel dp;
@@ -39,6 +41,8 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 	private void disconnect() {
 		remove(transferButton);
 		remove(disconnectButton);
+		remove(playButton);
+		remove(drawButton);
 
 		try {
 			dos.close();
@@ -60,9 +64,21 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 		transferButton.addActionListener(this);
 		add(transferButton);
 
-		playButton = new JButton("Play");
-		playButton.setPreferredSize(new Dimension(140, 75));
-		playButton.setActionCommand("play");
+		playButton = new JButton("Play Lydian");
+		playButton.setPreferredSize(new Dimension(46, 75));
+		playButton.setActionCommand("lydian");
+		playButton.addActionListener(this);
+		add(playButton);
+
+		playButton = new JButton("Play Harmonic");
+		playButton.setPreferredSize(new Dimension(46, 75));
+		playButton.setActionCommand("harmonic");
+		playButton.addActionListener(this);
+		add(playButton);
+
+		playButton = new JButton("Play Chromatic");
+		playButton.setPreferredSize(new Dimension(46, 75));
+		playButton.setActionCommand("chromatic");
 		playButton.addActionListener(this);
 		add(playButton);
 
@@ -83,22 +99,23 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 		boolean[][] barray = dp.getBarray();
 
 		sendByte(TRANSFER);
-
-		for(int x=0; x<barray.length; x++) {
-			for(int y=0; y<barray[0].length; y++) {
-				try {
+		try {
+			for(int x=0; x<barray.length; x++) {
+				for(int y=0; y<barray[0].length; y++) {
 					dos.writeBoolean(barray[x][y]);
 				}
-				catch(IOException e) {
-					e.printStackTrace();
-				}
 			}
+			dos.flush();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void sendByte(byte b) {
 		try {
 			dos.writeByte(b);
+			dos.flush();
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -122,6 +139,7 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 						connectButton.setText("Connected...");
 						connectButton.setEnabled(false);
 						connected = true;
+						setupButtons();
 					}
 					catch(NXTCommException e) {
 						e.printStackTrace();
@@ -134,9 +152,15 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 			case "disconnect":
 				disconnect();
 				break;
-			case "play":
-				sendByte(PLAY);
+			case "lydian":
+				sendByte(PLAY_LYDIAN);
 				break;
+			case "harmonic":
+				sendByte(PLAY_HARMONIC);
+				break;
+			case "chromatic":
+				sendByte(PLAY_CHROMATIC);
+				break;								
 			case "draw":
 				sendByte(DRAW);
 				break;

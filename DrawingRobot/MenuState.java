@@ -34,7 +34,8 @@ public class MenuState implements MenuListener {
 			break;
 
 			case SLAVE:
-			//new DrawState();
+				new SlaveState();
+			break;
 
 			case CANCEL:
 				System.exit(0);
