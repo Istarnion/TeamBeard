@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 
 import javax.swing.JPanel;
 
-public class DrawPanel extends JPanel {
+public class DrawPanel extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = 8978779502294174479L;
 
@@ -36,21 +36,7 @@ public class DrawPanel extends JPanel {
 		super.addMouseListener(mh);
 		super.addMouseMotionListener(mh);
 		
-		super.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_S && e.isControlDown() && !saving) saveFile();
-				if(e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) invert();
-				if(e.getKeyCode() == KeyEvent.VK_R && e.isControlDown()) clear();
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {}
-
-			@Override
-			public void keyTyped(KeyEvent e) {}
-		});
+		super.addKeyListener(this);
 		
 		super.setFocusable(true);
 		super.requestFocus();
@@ -71,7 +57,7 @@ public class DrawPanel extends JPanel {
 		g.drawImage(img, 0, 0, super.getWidth(), super.getHeight(), null);
 	}
 	
-	private void invert() {
+	public void invert() {
 		for(int i=0; i<barray.length; i++) {
 			for(int j=0; j<barray[0].length; j++) {
 				barray[i][j] = !barray[i][j];
@@ -80,7 +66,7 @@ public class DrawPanel extends JPanel {
 		repaint();
 	}
 
-	private void clear() {
+	public void clear() {
 		for(int i=0; i<barray.length; i++) {
 			for(int j=0; j<barray[0].length; j++) {
 				barray[i][j] = false;
@@ -90,8 +76,8 @@ public class DrawPanel extends JPanel {
 	}
 
 	public void handleMouseThing(double x, double y) {
-		int posx = (int)((x-pxWidth/2)/pxWidth);
-		int posy = (int)((y-pxHeight/2)/pxHeight);
+		int posx = (int)((x)/pxWidth);
+		int posy = (int)((y)/pxHeight);
 		
 		if(posx >= 0 && posx < barray.length && posy >= 0 && posy < barray[0].length) {
 			barray[posx][posy] = true;
@@ -109,6 +95,19 @@ public class DrawPanel extends JPanel {
 		saving = false;
 	}
 	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_S && e.isControlDown() && !saving) saveFile();
+		if(e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) invert();
+		if(e.getKeyCode() == KeyEvent.VK_R && e.isControlDown()) clear();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
 	private class MouseHelper extends MouseAdapter {
 		
 		private DrawPanel client;

@@ -4,55 +4,105 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-class ComunicatorPanel extends JPanel {
+class ComunicatorPanel extends JPanel implements ActionListener {
+
+	private final static byte
+		TRANSFER = 0,
+		PLAY = 1,
+		DRAW = 2,
+		DISCONNECT = 3;
 
 	private NXTComm nxtComm;
+	private DrawPanel dp;
 
-	public ComunicatorPanel(int height) {
+	private DataOutputStream dos;
+
+	private boolean connected = false;
+
+	private JButton connectButton, transferButton, disconnectButton;
+
+	public ComunicatorPanel(int height, DrawPanel dp) {
+		this.dp = dp;
 		setPreferredSize(new Dimension(150, height));
 
-		JButton connectButton = new JButton("Connect");
+		connectButton = new JButton("Connect");
 		connectButton.setPreferredSize(new Dimension(140, 75));
-		connectButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				try {
-					NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-					NXTInfo[] nxtInfo = nxtComm.search("NXT");
-
-					for(NXTInfo ni : nxtInfo) {
-						System.out.println("NXT: "+nxtInfo);
-						nxtComm.open(ni);
-						DataOutputStream dos = new DataOutputStream(nxtComm.getOutputStream());
-						do {
-							String s = JOptionPane.showInputDialog("Please input frequency");
-
-							if(s.equals("exit")) {
-								dos.writeInt(0);
-								dos.flush();
-								break;
-							}
-							else {
-								dos.writeInt(Integer.parseInt(s));
-								dos.flush();
-							}
-
-						}
-						while(true);
-						nxtComm.close();
-					}
-				}
-				catch(NXTCommException e) {
-					e.printStackTrace();
-				}
-				catch(IOException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-		});
+		connectButton.setActionCommand("connect");
+		connectButton.addActionListener(this);
 
 		add(connectButton);
+
+		super.setFocusable(true);
+		super.requestFocus();
 	}
 
+	private void disconnect() {
+		remove(transferButton);
+		remove(disconnectButton);
 
+		try {
+			dos.close();
+			nxtComm.close();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+
+		connected = false;
+		connectButton.setEnabled(true);
+		connectButton.setText("Connect");
+	}
+
+	private void setupButtons() {
+		transferButton = new JButton("Transfer");
+		transferButton.setPreferredSize(new Dimension(140, 75));
+		transferButton.setActionCommand("transfer");
+		transferButton.addActionListener(this);
+		add(transferButton);
+
+		disconnectButton = new JButton("Disconnect");
+		disconnectButton.setPreferredSize(new Dimension(140, 75));
+		disconnectButton.setActionCommand("disconnect");
+		disconnectButton.addActionListener(this);
+		add(disconnectButton);
+	}
+
+	private void transfer() {
+		boolean[][] dp.getBarray();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		switch(ae.getActionCommand()) {
+			case "connect":
+				if(!connected) {
+					try {
+						nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
+						NXTInfo[] nxtInfo = nxtComm.search("NXT");
+
+						for(NXTInfo ni : nxtInfo) {
+							System.out.println("NXT: "+ni.name+", "+ni.deviceAddress);
+							nxtComm.open(ni);
+							dos = new DataOutputStream(nxtComm.getOutputStream());
+						}
+						connectButton.setText("Connected...");
+						connectButton.setEnabled(false);
+						connected = true;
+					}
+					catch(NXTCommException e) {
+						e.printStackTrace();
+					}
+				}
+				break;
+			case "transfer":
+				break;
+			case "disconnect":
+				disconnect();
+				break;
+			default:
+				break;
+		}
+
+		super.requestFocus();
+	}
 }
