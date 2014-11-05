@@ -10,7 +10,6 @@ public class GUI {
 		//Sets look and style to Nimbus instead of Metal.
 		try {
 		    for (LookAndFeelInfo info : getInstalledLookAndFeels()) {
-		    	System.out.println(info.getName());
 		        if ("Nimbus".equals(info.getName())) {
 		            setLookAndFeel(info.getClassName());
 		            break;
@@ -18,7 +17,7 @@ public class GUI {
 		    }
 		}
 		catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		    System.out.println("Nimbus not available. falling back to Metal.");
 		}
 
 		JFrame frame = new JFrame("DRAWDUCK");

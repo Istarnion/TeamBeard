@@ -22,6 +22,30 @@ class OptionPanel extends JPanel implements ActionListener {
 		button.addActionListener(this);
 		this.add(button);
 
+		button = new JButton("Noise");
+		button.setActionCommand("noise");
+		button.addActionListener(this);
+		this.add(button);
+
+		button = new JButton("Save");
+		button.setActionCommand("save");
+		button.addActionListener(this);
+		this.add(button);
+
+		ButtonGroup bg = new ButtonGroup();
+		JRadioButton rButton = new JRadioButton("Black");
+		rButton.setActionCommand("black");
+		rButton.addActionListener(this);
+		rButton.setSelected(true);
+		bg.add(rButton);
+		this.add(rButton);
+
+		rButton = new JRadioButton("White");
+		rButton.setActionCommand("white");
+		rButton.addActionListener(this);
+		bg.add(rButton);
+		this.add(rButton);
+
 		super.setFocusable(true);
 		super.requestFocus();
 	}
@@ -35,6 +59,17 @@ class OptionPanel extends JPanel implements ActionListener {
 			case "invert":
 				drawPanel.invert();
 				break;
+			case "noise":
+				drawPanel.noise();
+				break;
+			case "black":
+				drawPanel.setDrawColor(true);
+				break;
+			case "white":
+				drawPanel.setDrawColor(false);
+				break;
+			case "save":
+				drawPanel.saveFile();
 			default:
 				System.out.println("DUCKKNIGGET!");
 				break;

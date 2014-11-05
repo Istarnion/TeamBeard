@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -23,6 +24,8 @@ public class DrawPanel extends JPanel implements KeyListener {
 	
 	private double pxWidth, pxHeight;
 	
+	private boolean black = true; // The 'color' we draw with. False is white.
+
 	public DrawPanel(int w, int h) {
 		super.setPreferredSize(new Dimension(w, h));
 		img = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
@@ -75,12 +78,26 @@ public class DrawPanel extends JPanel implements KeyListener {
 		repaint();
 	}
 
+	public void noise() {
+		Random random = new Random();
+		for(int i=0; i<barray.length; i++) {
+			for(int j=0; j<barray[0].length; j++) {
+				barray[i][j] = random.nextBoolean();
+			}
+		}
+		repaint();
+	}
+
+	public void setDrawColor(boolean black) {
+		this.black = black;
+	}
+
 	public void handleMouseThing(double x, double y) {
 		int posx = (int)((x)/pxWidth);
 		int posy = (int)((y)/pxHeight);
 		
 		if(posx >= 0 && posx < barray.length && posy >= 0 && posy < barray[0].length) {
-			barray[posx][posy] = true;
+			barray[posx][posy] = black;
 		}
 		super.repaint();
 	}
@@ -89,7 +106,7 @@ public class DrawPanel extends JPanel implements KeyListener {
 		return barray;
 	}
 	
-	private void saveFile() {
+	public void saveFile() {
 		saving = true;
 		FileSaver.saveFile(barray);
 		saving = false;
