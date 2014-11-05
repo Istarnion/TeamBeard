@@ -21,11 +21,22 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 
 	private boolean connected = false;
 
-	private JButton connectButton, transferButton, disconnectButton, playButton, drawButton;
+	private JButton 
+		connectButton,
+		transferButton,
+		disconnectButton,
+		lydianButton,
+		harmonicButton,
+		chromaticButton,
+		drawButton;
+
+	private JPanel playPanel;
+	private JPanel subPlayPanel;
+	private JLabel playLabel;
 
 	public ComunicatorPanel(int height, DrawPanel dp) {
 		this.dp = dp;
-		setPreferredSize(new Dimension(150, height));
+		setPreferredSize(new Dimension(170, height));
 
 		connectButton = new JButton("Connect");
 		connectButton.setPreferredSize(new Dimension(140, 75));
@@ -34,15 +45,25 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 
 		add(connectButton);
 
+		setupButtons();
+
+		setButtonsActive(false);
+
 		super.setFocusable(true);
 		super.requestFocus();
 	}
 
+	private void setButtonsActive(boolean b) {
+		transferButton.setEnabled(b);
+		lydianButton.setEnabled(b);
+		harmonicButton.setEnabled(b);
+		chromaticButton.setEnabled(b);
+		drawButton.setEnabled(b);
+		disconnectButton.setEnabled(b);
+	}
+
 	private void disconnect() {
-		remove(transferButton);
-		remove(disconnectButton);
-		remove(playButton);
-		remove(drawButton);
+		setButtonsActive(false);
 
 		try {
 			dos.close();
@@ -64,23 +85,34 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 		transferButton.addActionListener(this);
 		add(transferButton);
 
-		playButton = new JButton("Play Lydian");
-		playButton.setPreferredSize(new Dimension(46, 75));
-		playButton.setActionCommand("lydian");
-		playButton.addActionListener(this);
-		add(playButton);
+		//Play buttons:
+		playPanel = new JPanel();
+		playPanel.setPreferredSize(new Dimension(175, 140));
+		subPlayPanel = new JPanel();
+		subPlayPanel.setPreferredSize(new Dimension(100, 140));
 
-		playButton = new JButton("Play Harmonic");
-		playButton.setPreferredSize(new Dimension(46, 75));
-		playButton.setActionCommand("harmonic");
-		playButton.addActionListener(this);
-		add(playButton);
+		lydianButton = new JButton("Lydian");
+		lydianButton.setPreferredSize(new Dimension(100, 40));
+		lydianButton.setActionCommand("lydian");
+		lydianButton.addActionListener(this);
+		subPlayPanel.add(lydianButton);
 
-		playButton = new JButton("Play Chromatic");
-		playButton.setPreferredSize(new Dimension(46, 75));
-		playButton.setActionCommand("chromatic");
-		playButton.addActionListener(this);
-		add(playButton);
+		harmonicButton = new JButton("Harmonic");
+		harmonicButton.setPreferredSize(new Dimension(100, 40));
+		harmonicButton.setActionCommand("harmonic");
+		harmonicButton.addActionListener(this);
+		subPlayPanel.add(harmonicButton);
+
+		chromaticButton = new JButton("Chromatic");
+		chromaticButton.setPreferredSize(new Dimension(100, 40));
+		chromaticButton.setActionCommand("chromatic");
+		chromaticButton.addActionListener(this);
+		subPlayPanel.add(chromaticButton);
+
+		playLabel = new JLabel("Play:");
+		playPanel.add(playLabel);
+		playPanel.add(subPlayPanel);
+		add(playPanel);
 
 		drawButton = new JButton("Draw");
 		drawButton.setPreferredSize(new Dimension(140, 75));
@@ -139,7 +171,7 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 						connectButton.setText("Connected...");
 						connectButton.setEnabled(false);
 						connected = true;
-						setupButtons();
+						setButtonsActive(true);
 					}
 					catch(NXTCommException e) {
 						e.printStackTrace();

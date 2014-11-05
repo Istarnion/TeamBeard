@@ -1,11 +1,26 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import static javax.swing.UIManager.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class GUI {
-	
-
 
 	public GUI(int size) {
+		//Sets look and style to Nimbus instead of Metal.
+		try {
+		    for (LookAndFeelInfo info : getInstalledLookAndFeels()) {
+		    	System.out.println(info.getName());
+		        if ("Nimbus".equals(info.getName())) {
+		            setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		}
+		catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
+
 		JFrame frame = new JFrame("DRAWDUCK");
 		JPanel container = new JPanel();
 		DrawPanel dp = new DrawPanel(size, size);
