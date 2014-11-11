@@ -25,14 +25,17 @@ class MusicGenerator {
 	// Generate music!
 	public void generateMusic(boolean[][] scanArray) {
 		short[] scanArrayConverted = convertBool2DToShort2D(scanArray);
+		Random randomLastNote = new Random();
+		Random random = new Random(1337); // Random generator for spicing things up if the same leap is made many times in  a row		
+
 		int noteLength; // stores the int that is returned from getNoteLength()
 		int indexOfLeaps; // stores the int that is returned from getNoteLeapBits()
 		int leap = 0; // 
 		int turnCounter = 0;
 		int lastLeap = 0; // Keeps a track of what the last leap was
 		int leapRepeatCounter = 0; // Counts how many times a leap has been repeated
-		int lastNote = 11; // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
-		Random random = new Random(1337); // Random generator for spicing things up if the same leap is made many times in  a row
+		int lastNote = randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
+
 
 		// Check what int getNoteLengthBits returns and set the frequency of the note
 		for(int i = 0; i < scanArrayConverted.length; i++) {
