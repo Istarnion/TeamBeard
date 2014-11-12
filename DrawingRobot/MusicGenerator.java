@@ -243,7 +243,7 @@ class MusicGenerator {
 	}
 
 	/**
-	*	Conversion between a two dimensianal boolean array to a two dimensional short array
+	*	Conversion between a two dimensianal boolean array to a one dimensional short array
 	*	
 	*	@param barray The two dimensional boolean array that shall be converted.
 	*/

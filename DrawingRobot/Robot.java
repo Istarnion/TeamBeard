@@ -161,7 +161,7 @@ public class Robot {
 	 * @param true sets the marker down, false lifts it up.
 	 */
 	public void setMarker(boolean down) {
-		marker.rotateTo(down?30:0);
+		marker.rotateTo(down?0:30);
 	}
 	
 	/**
@@ -235,7 +235,7 @@ public class Robot {
 		LCD.drawString("Drawing...", 0,1,false);
 		byte c;
 		for(byte b=0; b<Y_POS_MAX; b++) {
-			// Progress bar!
+			//Progress bar!
 			byte progress = (byte)(b* (100.0/(double)Y_POS_MAX));
 			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
 			for(byte y=0; y<10; y++) {
@@ -245,7 +245,7 @@ public class Robot {
 			setYPos(b);
 			for(c=0; c<X_POS_MAX; c++) {
 				setXPos(c);
-				if(barray[c][c]) {
+				if(barray[c][b]) {
 					setMarker(true);
 				}
 				else {
@@ -258,7 +258,7 @@ public class Robot {
 			setYPos(b);
 			for(c=X_POS_MAX-1; c>=0; c--) {
 				setXPos(c);
-				if(barray[b][c]) {
+				if(barray[c][b]) {
 					setMarker(true);
 				}
 				else {

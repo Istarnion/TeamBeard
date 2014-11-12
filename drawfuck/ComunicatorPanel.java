@@ -34,9 +34,20 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 	private JPanel subPlayPanel;
 	private JLabel playLabel;
 
+	JDialog waitingDialog;
+	JLabel messageLabel;
+
 	public ComunicatorPanel(int height, DrawPanel dp) {
 		this.dp = dp;
 		setPreferredSize(new Dimension(170, height));
+
+		waitingDialog = new JDialog();
+		messageLabel = new JLabel("Please wait..");
+		waitingDialog.setTitle("Please wait..");
+		waitingDialog.add(messageLabel);
+		messageLabel.setPreferredSize(new Dimension(200, 100));
+		waitingDialog.pack();
+		waitingDialog.setLocationRelativeTo(null);
 
 		connectButton = new JButton("Connect");
 		connectButton.setPreferredSize(new Dimension(140, 75));
@@ -159,6 +170,7 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 		switch(ae.getActionCommand()) {
 			case "connect":
 				if(!connected) {
+					waitingDialog.setVisible(true);
 					try {
 						nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
 						NXTInfo[] nxtInfo = nxtComm.search("NXT");
@@ -173,9 +185,16 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 						connected = true;
 						setButtonsActive(true);
 					}
-					catch(NXTCommException e) {
-						e.printStackTrace();
+					catch(NXTCommException ie) {
+						messageLabel.setText("Bluetooth not available.");
+						try {
+							Thread.sleep(4000);
+						}
+						catch(InterruptedException e) {
+							ie.printStackTrace();
+						}
 					}
+					waitingDialog.setVisible(false);
 				}
 				break;
 			case "transfer":
