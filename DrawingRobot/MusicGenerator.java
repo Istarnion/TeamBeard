@@ -34,7 +34,7 @@ class MusicGenerator {
 		int turnCounter = 0;
 		int lastLeap = 0; // Keeps a track of what the last leap was
 		int leapRepeatCounter = 0; // Counts how many times a leap has been repeated
-		int lastNote = 11 //randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
+		int lastNote = randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
 
 
 		// Check what int getNoteLengthBits returns and set the frequency of the note
@@ -66,44 +66,22 @@ class MusicGenerator {
 			// Make a second leap
 			if(indexOfLeaps < 1) {
 				if(turnCounter > 1) {
-					if(random.nextInt(2) == 0) {
-						leap = 2;
-						turnCounter = 0;
-					}
-					else {
-						leap = -2;
-						turnCounter = 0;
-					}
+					leap = random.nextInt(2) == 0 ? 2 : -2;
+					turnCounter = 0;
 				}
 				else {
 					// Is the last leap a second? If not, make a random second leap, -1 is down, 1 is up 
 					if(lastLeap != 1 && lastLeap != -1) {
-						if(random.nextInt(2) == 0) {
-							leap = 1;
-						} 
-						else {
-							leap = -1;
-						}
+						leap = random.nextInt(2) == 0 ? 1 : -1;
 					}
 
-					else if(lastLeap == 1 && leapRepeatCounter > 4) {
-						leap = -1;
+					else if(leapRepeatCounter > 4) {
+						leap = lastLeap == 1 ? -1 : 1;
 						leapRepeatCounter = 0;
 						turnCounter++;
 					}
-
-					else if(lastLeap == -1 && leapRepeatCounter > 4) {
-						leap = 1;
-						leapRepeatCounter = 0;
-						turnCounter++;
-					}
-
-					else if(lastLeap == 1) {
-						leap = 1;
-					}
-
-					else if(lastLeap == -1) {
-						leap = -1;
+					else {
+						leap = lastLeap == 1 ? 1 : -1;
 					}
 				}	
 			}
@@ -120,46 +98,23 @@ class MusicGenerator {
 			else {
 				//insertPrintln("INDEX 63");
 				if(turnCounter > 2) {
-					if(random.nextInt(2) == 0) {
-						leap = 1;
-						turnCounter = 0;
-					}
-					else {
-						leap = -1;
-						turnCounter = 0;
-					}
-				}
-
+					leap = random.nextInt(2) == 0 ? 1 : -1;
+					turnCounter = 0;
+				} 
 				else {
-
+					
 					if(lastLeap != -2 && lastLeap != 2) {
-						if(random.nextInt(2) == 0) {
-							leap = 2;
-						}
-						else {
-							leap = -2;
-						}
-					}
-				
-					else if(lastLeap == 2 && leapRepeatCounter > 2) {
-						leap = -2;
+						leap = random.nextInt(2) == 0 ? 2 : -2;
+					} 
+
+					else if(leapRepeatCounter > 2) {
+						leap = lastLeap == 2 ? -2 : 2;
 						leapRepeatCounter = 0;
 						turnCounter++;
-						//insertPrintln("turned down");
 					}
-					else if(lastLeap == -2 && leapRepeatCounter > 2) {
-						leap = 2;
-						leapRepeatCounter = 0;
-						turnCounter++;
-						//insertPrintln("turned up");
-					}
-					else if(lastLeap == 2) {
-						leap = 2;
-						//insertPrintln("going up");
-					}
-					else if(lastLeap == -2) {
-						leap = -2;
-						//insertPrintln("Going down");
+
+					else {
+						leap = lastLeap == 2 ? 2 : -2;
 					}
 				}
 			}
@@ -170,6 +125,7 @@ class MusicGenerator {
 				lastNote += leap;
 				lastLeap = leap;
 			}
+			
 			else {
 				composition[0][i] = scaleArray[11];
 				lastLeap = 0;
@@ -179,9 +135,6 @@ class MusicGenerator {
 			if(lastLeap == leap) {
 				leapRepeatCounter++;
 			}
-
-			
-			
 
 			// Check if the duration of the current note in composition is set to 59ms (pause length)
 			// if it is, set the frequency of current note to 0. It will be ignored in Music Player and instead sleep for 59ms
