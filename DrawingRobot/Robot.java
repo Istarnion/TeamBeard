@@ -232,39 +232,93 @@ public class Robot {
 	 */
 	public void draw(boolean[][] barray) {
 		LCD.clear();
-		LCD.drawString("Drawing...", 0,1,false);
-		byte c;
-		for(byte b=0; b<Y_POS_MAX; b++) {
-			//Progress bar!
-			byte progress = (byte)(b* (100.0/(double)Y_POS_MAX));
-			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
-			for(byte y=0; y<10; y++) {
-				LCD.setPixel(progress, 25+y, 1);
+
+		setMarker(false);
+		setXPos(0);
+		setYPos(0);
+
+		for(int i=0; i<barray.length; i++) {
+			for(int j=0; j<barray[0].length; j++) {
+				LCD.setPixel(i, j, (barray[i][j]?1:0));
+			}
+		}
+
+
+		boolean right = true;
+		for(int i=0; i<barray[0].length; i++) {
+			LCD.drawString(i+"/63", 10, 3, false);
+
+			boolean[] line = barray[i];
+			boolean empty = true;
+			for(boolean b : line) {
+				if(b) {
+					empty = false;
+					break;
+				}
 			}
 
-			setYPos(b);
-			for(c=0; c<X_POS_MAX; c++) {
-				setXPos(c);
-				if(barray[c][b]) {
-					setMarker(true);
-				}
-				else {
-					setMarker(false);
-				}
+			if(!empty) {
+				writeLine(line, right);
+				right = !right;
 			}
-			b++;
 
-			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
-			setYPos(b);
-			for(c=X_POS_MAX-1; c>=0; c--) {
-				setXPos(c);
-				if(barray[c][b]) {
-					setMarker(true);
-				}
-				else {
-					setMarker(false);
-				}
+			if(getYPos() < Y_POS_MAX-1) {
+				setYPos(getYPos()+1);
 			}
+		}
+
+		// Reset
+		setMarker(false);
+		setXPos(0);
+		setYPos(0);
+		xAxis.flt();
+		yAxis.flt();
+	}
+
+	private void writeLine(boolean[] dataline, boolean right) {
+		if(right) {
+			setXPos(0);
+
+			Thread t = new Thread() {
+				@Override
+				public void run() {
+					setMarker(dataline[0]);
+					for(byte b=0; b<(byte)dataline.length; b++) {
+						try {
+							sleep(MILLIS_PER_UNIT);
+						}
+						catch(InterruptedException e) {
+							// Nothing
+						}
+						if(b<(byte)dataline.length-1) setMarker(dataline[b+1]);
+					}
+				}
+			};
+			t.setDaemon(true);
+			t.start();
+			setXPos(X_POS_MAX-1);
+		}	
+		else {
+			setXPos(X_POS_MAX-1);
+
+			Thread t = new Thread() {
+				@Override
+				public void run() {
+					setMarker(dataline[dataline.length-1]);
+					for(byte b=(byte)(dataline.length-1); b>=0; b--) {
+						try {
+							sleep(MILLIS_PER_UNIT);
+						}
+						catch(InterruptedException e) {
+							// Nothing
+						}
+						if(b>0) setMarker(dataline[b-1]);
+					}
+				}
+			};
+			t.setDaemon(true);
+			t.start();
+			setXPos(X_POS_MAX-1);
 		}
 	}
 }

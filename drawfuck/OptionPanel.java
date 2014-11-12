@@ -32,6 +32,16 @@ class OptionPanel extends JPanel implements ActionListener {
 		button.addActionListener(this);
 		this.add(button);
 
+		button = new JButton("Chess");
+		button.setActionCommand("chess");
+		button.addActionListener(this);
+		this.add(button);
+
+		button = new JButton("Lines");
+		button.setActionCommand("lines");
+		button.addActionListener(this);
+		this.add(button);
+
 		ButtonGroup bg = new ButtonGroup();
 		JRadioButton rButton = new JRadioButton("Black");
 		rButton.setActionCommand("black");
@@ -70,6 +80,13 @@ class OptionPanel extends JPanel implements ActionListener {
 				break;
 			case "save":
 				drawPanel.saveFile();
+				break;
+			case "chess":
+				drawPanel.chessPattern();
+				break;
+			case "lines":
+				drawPanel.horizontalLines();
+				break;
 			default:
 				System.out.println("DUCKKNIGGET!");
 				break;
