@@ -34,7 +34,7 @@ class MusicGenerator {
 		int turnCounter = 0;
 		int lastLeap = 0; // Keeps a track of what the last leap was
 		int leapRepeatCounter = 0; // Counts how many times a leap has been repeated
-		int lastNote = 11 //randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
+		int lastNote = 11; //randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
 
 
 		// Check what int getNoteLengthBits returns and set the frequency of the note

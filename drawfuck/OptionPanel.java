@@ -37,8 +37,18 @@ class OptionPanel extends JPanel implements ActionListener {
 		button.addActionListener(this);
 		this.add(button);
 
-		button = new JButton("Lines");
-		button.setActionCommand("lines");
+		button = new JButton("Squares");
+		button.setActionCommand("squares");
+		button.addActionListener(this);
+		this.add(button);
+
+		button = new JButton("||||");
+		button.setActionCommand("vlines");
+		button.addActionListener(this);
+		this.add(button);
+
+		button = new JButton("===");
+		button.setActionCommand("hlines");
 		button.addActionListener(this);
 		this.add(button);
 
@@ -84,8 +94,14 @@ class OptionPanel extends JPanel implements ActionListener {
 			case "chess":
 				drawPanel.chessPattern();
 				break;
-			case "lines":
+			case "hlines":
 				drawPanel.horizontalLines();
+				break;
+			case "vlines":
+				drawPanel.verticalLines();
+				break;
+			case "squares":
+				drawPanel.squares();
 				break;
 			default:
 				System.out.println("DUCKKNIGGET!");
