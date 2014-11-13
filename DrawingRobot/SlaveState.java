@@ -18,7 +18,7 @@ class SlaveState {
 
 	public SlaveState() {
 		LCD.clearDisplay();
-		System.out.println("Waiting for connection ...");
+		System.out.println("Waiting for \nconnection ...");
 		sourceArray = new boolean[64][64];
 		generator = new MusicGenerator();
 	
