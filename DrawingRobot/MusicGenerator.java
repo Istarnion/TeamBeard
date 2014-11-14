@@ -34,7 +34,7 @@ class MusicGenerator {
 		int turnCounter = 0;
 		int lastLeap = 0; // Keeps a track of what the last leap was
 		int leapRepeatCounter = 0; // Counts how many times a leap has been repeated
-		int lastNote = randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray). Starts at 11, the note C.
+		int lastNote = randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray).
 
 
 		// Check what int getNoteLengthBits returns and set the frequency of the note
@@ -94,7 +94,6 @@ class MusicGenerator {
 
 			// Index 63: 
 			// Make a third leap
-			
 			else {
 				//insertPrintln("INDEX 63");
 				if(turnCounter > 2) {
@@ -142,6 +141,8 @@ class MusicGenerator {
 				composition[0][i] = 0;
 			}
 		}
+
+		composition[1][composition[0].length-1] = 240; // Sets the last note in the composition to be long
 	}
 
 	private boolean isBetween(int x, int lower, int upper) {

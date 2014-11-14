@@ -165,7 +165,7 @@ public class Robot {
 	 * @param true sets the marker down, false lifts it up.
 	 */
 	public void setMarker(boolean down) {
-		marker.rotateTo(down?0:45);
+		marker.rotateTo(down?-45:0);
 	}
 	
 	/**
@@ -193,40 +193,37 @@ public class Robot {
 		LCD.clear();
 		LCD.drawString("Scanning...", 0,1,false);
 		boolean[][] output = new boolean[X_POS_MAX][Y_POS_MAX];
-		byte c;
-		for(byte b=0; b<Y_POS_MAX; b++) {
-			// Progress bar!
-			byte progress = (byte)(b* (100.0/(double)Y_POS_MAX));
-			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
-			for(byte y=0; y<10; y++) {
-				LCD.setPixel(progress, 25+y, 1);
+
+		setMarker(false);
+		setXPos(0);
+		setYPos(0);
+
+		boolean right = true;
+		boolean[] dataline;
+		for(int i=0; i<Y_POS_MAX; i++) {
+			LCD.drawString(i+"/63", 11, 3, false);
+
+			dataline = readLine(right);
+			right = !right;
+
+			for(byte b=0; b<dataline.length; b++) {
+				LCD.setPixel(b, getYPos(), (dataline[b]?1:0));
 			}
 
-			setYPos(b);
-			for(c=0; c<X_POS_MAX; c++) {
-				setXPos(c);
-				if(lightSensor.getNormalizedLightValue() < 500) {
-					output[b][c] = true;
-				}
-				else {
-					output[b][c] = false;
-				}
-			}
-			b++;
-
-			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
-			setYPos(b);
-			for(c=X_POS_MAX-1; c>=0; c--) {
-				setXPos(c);
-				if(lightSensor.getNormalizedLightValue() < 500) {
-					output[b][c] = true;
-				}
-				else {
-					output[b][c] = false;
-				}
+			output[i] = dataline;
+			if(getYPos() < Y_POS_MAX-1) {
+				setYPos(getYPos()+1);
+				Sound.beep();
 			}
 		}
 
+		// Reset
+		setXPos(0);
+		setYPos(0);
+		xAxis.flt();
+		yAxis.flt();
+		marker.flt();
+		Sound.twoBeeps();
 		return output;
 	}
 
@@ -338,6 +335,7 @@ public class Robot {
 
 	private void writeLine(boolean[] dataline, boolean right) {
 		final int UNIT_TIME = 500;
+		final int UNIT_SPEED = 14;
 		xAxis.setSpeed(14);
 
 		if(right) {
