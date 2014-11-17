@@ -106,6 +106,24 @@ public class DrawPanel extends JPanel implements KeyListener {
 		repaint();
 	}
 
+	public void verticalLines() {
+		for(int i=0; i<barray.length; i++) {
+			for(int j=0; j<barray[0].length; j++) {
+				barray[i][j] = (i%2==0);
+			}
+		}
+		repaint();
+	}
+
+	public void squares() {
+		for(int i=0; i<barray.length; i++) {
+			for(int j=0; j<barray[0].length; j++) {
+				barray[i][j] = (i<31 ^ j<31);
+			}
+		}
+		repaint();
+	}
+
 	public void setDrawColor(boolean black) {
 		this.black = black;
 	}

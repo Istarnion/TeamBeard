@@ -89,6 +89,10 @@ public class Robot {
 	 * @param The position on the x-axis to where the printer head should go.
 	 */
 	public void setXPos(int xPos) {
+		setXPos(xPos, MILLIS_PER_UNIT);
+	}
+	
+	public void setXPos(int xPos, int speed) {
 		int x = xPos;
 		if(x<0) x = 0;
 		else if(x>=X_POS_MAX) x = X_POS_MAX-1;
@@ -97,7 +101,7 @@ public class Robot {
 		if(amountToMove > 0) {
 			xAxis.forward();
 			try {
-				Thread.sleep(70*amountToMove);
+				Thread.sleep(speed*amountToMove);
 				this.xPos = x;
 				xAxis.stop();
 			}
@@ -108,7 +112,7 @@ public class Robot {
 		else if(amountToMove < 0) {
 			xAxis.backward();
 			try {
-				Thread.sleep(70*Math.abs(amountToMove));
+				Thread.sleep(speed*Math.abs(amountToMove));
 				this.xPos = x;
 				xAxis.stop();
 			}
@@ -117,7 +121,7 @@ public class Robot {
 			}
 		}
 	}
-	
+
 	/**
 	 * @return The printer head current position on the y-axis
 	 */
@@ -136,7 +140,7 @@ public class Robot {
 		if(amountToMove > 0) {
 			yAxis.backward();
 			try {
-				Thread.sleep(70*amountToMove);
+				Thread.sleep(MILLIS_PER_UNIT*amountToMove);
 				this.yPos = y;
 				yAxis.stop();
 			}
@@ -147,7 +151,7 @@ public class Robot {
 		else if(amountToMove < 0) {
 			yAxis.forward();
 			try {
-				Thread.sleep(70*Math.abs(amountToMove));
+				Thread.sleep(MILLIS_PER_UNIT*Math.abs(amountToMove));
 				this.yPos = y;
 				yAxis.stop();
 			}
@@ -161,14 +165,14 @@ public class Robot {
 	 * @param true sets the marker down, false lifts it up.
 	 */
 	public void setMarker(boolean down) {
-		marker.rotateTo(down?0:30);
+		marker.rotateTo(down?-45:0);
 	}
 	
 	/**
 	 * Toggles the marker. If it is currently up, we move it down, and vice versa.
 	 */
 	public void toggleMarker() {
-		marker.rotateTo(isDown?0:30);
+		marker.rotateTo(isDown?-40:0);
 		isDown = !isDown;
 	}
 
@@ -189,40 +193,37 @@ public class Robot {
 		LCD.clear();
 		LCD.drawString("Scanning...", 0,1,false);
 		boolean[][] output = new boolean[X_POS_MAX][Y_POS_MAX];
-		byte c;
-		for(byte b=0; b<Y_POS_MAX; b++) {
-			// Progress bar!
-			byte progress = (byte)(b* (100.0/(double)Y_POS_MAX));
-			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
-			for(byte y=0; y<10; y++) {
-				LCD.setPixel(progress, 25+y, 1);
+
+		setMarker(false);
+		setXPos(0);
+		setYPos(0);
+
+		boolean right = true;
+		boolean[] dataline;
+		for(int i=0; i<Y_POS_MAX; i++) {
+			LCD.drawString(i+"/63", 11, 3, false);
+
+			dataline = readLine(right);
+			right = !right;
+
+			for(byte b=0; b<dataline.length; b++) {
+				LCD.setPixel(b, getYPos(), (dataline[b]?1:0));
 			}
 
-			setYPos(b);
-			for(c=0; c<X_POS_MAX; c++) {
-				setXPos(c);
-				if(lightSensor.getNormalizedLightValue() < 500) {
-					output[b][c] = true;
-				}
-				else {
-					output[b][c] = false;
-				}
-			}
-			b++;
-
-			LCD.drawString(b+"/"+Y_POS_MAX, 0, 2);
-			setYPos(b);
-			for(c=X_POS_MAX-1; c>=0; c--) {
-				setXPos(c);
-				if(lightSensor.getNormalizedLightValue() < 500) {
-					output[b][c] = true;
-				}
-				else {
-					output[b][c] = false;
-				}
+			output[i] = dataline;
+			if(getYPos() < Y_POS_MAX-1) {
+				setYPos(getYPos()+1);
+				Sound.beep();
 			}
 		}
 
+		// Reset
+		setXPos(0);
+		setYPos(0);
+		xAxis.flt();
+		yAxis.flt();
+		marker.flt();
+		Sound.twoBeeps();
 		return output;
 	}
 
@@ -245,8 +246,8 @@ public class Robot {
 
 
 		boolean right = true;
-		for(int i=0; i<barray[0].length; i++) {
-			LCD.drawString(i+"/63", 10, 3, false);
+		for(int i=0; i<barray.length; i++) {
+			LCD.drawString(i+"/63", 11, 3, false);
 
 			boolean[] line = barray[i];
 			boolean empty = true;
@@ -264,6 +265,7 @@ public class Robot {
 
 			if(getYPos() < Y_POS_MAX-1) {
 				setYPos(getYPos()+1);
+				Sound.beep();
 			}
 		}
 
@@ -273,30 +275,37 @@ public class Robot {
 		setYPos(0);
 		xAxis.flt();
 		yAxis.flt();
+		marker.flt();
+
+		xAxis.setSpeed(100);
+
+		Sound.twoBeeps();
 	}
 
-	private void writeLine(boolean[] dataline, boolean right) {
+	private boolean[] readLine(boolean right) {
+		boolean[] dataline = new boolean[64];
+
 		if(right) {
 			setXPos(0);
 
 			Thread t = new Thread() {
 				@Override
 				public void run() {
-					setMarker(dataline[0]);
-					for(byte b=0; b<(byte)dataline.length; b++) {
+					for(byte b=0; (b<(byte)dataline.length && !isInterrupted()); b++) {
 						try {
 							sleep(MILLIS_PER_UNIT);
 						}
 						catch(InterruptedException e) {
 							// Nothing
 						}
-						if(b<(byte)dataline.length-1) setMarker(dataline[b+1]);
+						dataline[b] = readValue();
 					}
 				}
 			};
 			t.setDaemon(true);
 			t.start();
 			setXPos(X_POS_MAX-1);
+			t.interrupt();
 		}	
 		else {
 			setXPos(X_POS_MAX-1);
@@ -304,21 +313,84 @@ public class Robot {
 			Thread t = new Thread() {
 				@Override
 				public void run() {
-					setMarker(dataline[dataline.length-1]);
-					for(byte b=(byte)(dataline.length-1); b>=0; b--) {
+					for(byte b=(byte)(dataline.length-1); (b>=0 && !isInterrupted()); b--) {
 						try {
 							sleep(MILLIS_PER_UNIT);
 						}
 						catch(InterruptedException e) {
 							// Nothing
 						}
-						if(b>0) setMarker(dataline[b-1]);
+						dataline[b] = readValue();
 					}
 				}
 			};
 			t.setDaemon(true);
 			t.start();
+			setXPos(0);
+			if(t.isAlive()) t.interrupt();
+		}
+
+		return dataline;
+	}
+
+	private void writeLine(boolean[] dataline, boolean right) {
+		final int UNIT_TIME = 500;
+		final int UNIT_SPEED = 14;
+		xAxis.setSpeed(14);
+
+		if(right) {
+			setXPos(0);
+
+			Thread t = new Thread() {
+				@Override
+				public void run() {
+					int prevDelay = 0;
+					long timeStamp = System.currentTimeMillis();
+					setMarker(dataline[0]);
+					for(byte b=0; (b<(byte)dataline.length && !isInterrupted()); b++) {
+						try {
+							sleep(UNIT_TIME-prevDelay);
+						}
+						catch(InterruptedException e) {
+							// Nothing
+						}
+						timeStamp = System.currentTimeMillis();
+						if(b<(byte)dataline.length-1) setMarker(dataline[b+1]);
+						prevDelay = (int)(System.currentTimeMillis() - timeStamp);
+					}
+				}
+			};
+			t.setDaemon(true);
+			t.start();
+			setXPos(X_POS_MAX-1, UNIT_TIME);
+			t.interrupt();
+		}	
+		else {
 			setXPos(X_POS_MAX-1);
+
+			Thread t = new Thread() {
+				@Override
+				public void run() {
+					int prevDelay = 0;
+					long timeStamp = System.currentTimeMillis();
+					setMarker(dataline[dataline.length-1]);
+					for(byte b=(byte)(dataline.length-1); (b>=0 && !isInterrupted()); b--) {
+						try {
+							sleep(UNIT_TIME-prevDelay);
+						}
+						catch(InterruptedException e) {
+							// Nothing
+						}
+						timeStamp = System.currentTimeMillis();
+						if(b>0) setMarker(dataline[b-1]);
+						prevDelay = (int)(System.currentTimeMillis() - timeStamp);
+					}
+				}
+			};
+			t.setDaemon(true);
+			t.start();
+			setXPos(0, UNIT_TIME);
+			if(t.isAlive()) t.interrupt();
 		}
 	}
 }
