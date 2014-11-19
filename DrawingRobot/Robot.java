@@ -287,110 +287,82 @@ public class Robot {
 
 		if(right) {
 			setXPos(0);
-
-			Thread t = new Thread() {
-				@Override
-				public void run() {
-					for(byte b=0; (b<(byte)dataline.length && !isInterrupted()); b++) {
-						try {
-							sleep(MILLIS_PER_UNIT);
-						}
-						catch(InterruptedException e) {
-							// Nothing
-						}
-						dataline[b] = readValue();
-					}
-				}
-			};
-			t.setDaemon(true);
-			t.start();
-			setXPos(X_POS_MAX-1);
-			t.interrupt();
 		}	
 		else {
 			setXPos(X_POS_MAX-1);
-
-			Thread t = new Thread() {
-				@Override
-				public void run() {
-					for(byte b=(byte)(dataline.length-1); (b>=0 && !isInterrupted()); b--) {
-						try {
-							sleep(MILLIS_PER_UNIT);
-						}
-						catch(InterruptedException e) {
-							// Nothing
-						}
-						dataline[b] = readValue();
-					}
-				}
-			};
-			t.setDaemon(true);
-			t.start();
-			setXPos(0);
-			if(t.isAlive()) t.interrupt();
 		}
 
-		return dataline;
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				for(byte b=0; (b<(byte)dataline.length && !isInterrupted()); b++) {
+					try {
+						sleep(MILLIS_PER_UNIT);
+					}
+					catch(InterruptedException e) {
+						// Nothing
+					}
+					dataline[b] = readValue();
+				}
+			}
+		};
+		t.setDaemon(true);
+		t.start();
+		setXPos(right?X_POS_MAX-1:0);
+		t.interrupt();
+
+		return flip(dataline);
 	}
 
 	private void writeLine(boolean[] dataline, boolean right) {
 		final int UNIT_TIME = 500;
 		final int UNIT_SPEED = 14;
-		xAxis.setSpeed(14);
+		xAxis.setSpeed(UNIT_SPEED);
 
 		if(right) {
 			setXPos(0);
-
-			Thread t = new Thread() {
-				@Override
-				public void run() {
-					int prevDelay = 0;
-					long timeStamp = System.currentTimeMillis();
-					setMarker(dataline[0]);
-					for(byte b=0; (b<(byte)dataline.length && !isInterrupted()); b++) {
-						try {
-							sleep(UNIT_TIME-prevDelay);
-						}
-						catch(InterruptedException e) {
-							// Nothing
-						}
-						timeStamp = System.currentTimeMillis();
-						if(b<(byte)dataline.length-1) setMarker(dataline[b+1]);
-						prevDelay = (int)(System.currentTimeMillis() - timeStamp);
-					}
-				}
-			};
-			t.setDaemon(true);
-			t.start();
-			setXPos(X_POS_MAX-1, UNIT_TIME);
-			t.interrupt();
 		}	
 		else {
 			setXPos(X_POS_MAX-1);
-
-			Thread t = new Thread() {
-				@Override
-				public void run() {
-					int prevDelay = 0;
-					long timeStamp = System.currentTimeMillis();
-					setMarker(dataline[dataline.length-1]);
-					for(byte b=(byte)(dataline.length-1); (b>=0 && !isInterrupted()); b--) {
-						try {
-							sleep(UNIT_TIME-prevDelay);
-						}
-						catch(InterruptedException e) {
-							// Nothing
-						}
-						timeStamp = System.currentTimeMillis();
-						if(b>0) setMarker(dataline[b-1]);
-						prevDelay = (int)(System.currentTimeMillis() - timeStamp);
-					}
-				}
-			};
-			t.setDaemon(true);
-			t.start();
-			setXPos(0, UNIT_TIME);
-			if(t.isAlive()) t.interrupt();
+			dataline = flip(dataline);
 		}
+			
+		final boolean[] barray = dataline;
+
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+
+				int currSleep = UNIT_TIME;
+				int prevDelay = 0;
+				long timeStamp = System.currentTimeMillis();
+				setMarker(barray[0]);
+				for(byte b=0; (b<(byte)barray.length && !isInterrupted()); b++) {
+					try {
+						sleep(currSleep-prevDelay);
+					}
+					catch(InterruptedException e) {
+						// Nothing
+					}
+					timeStamp = System.currentTimeMillis();
+					if(b<(byte)barray.length-1) setMarker(barray[b+1]);
+					prevDelay = (int)(System.currentTimeMillis() - timeStamp);
+				}
+			}
+		};
+
+		t.setDaemon(true);
+		t.start();
+		setXPos((right?X_POS_MAX-1 : 0), UNIT_TIME);
+		if(t.isAlive()) t.interrupt();
+		
+	}
+
+	private boolean[] flip(boolean[] barray) {
+		boolean[] output = new boolean[barray.length];
+		for(int i=0; i<barray.length; i++) {
+			output[i] = barray[barray.length-i-1];
+		}
+		return output;
 	}
 }
