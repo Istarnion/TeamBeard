@@ -57,4 +57,3 @@ public class MenuState implements MenuListener {
 		menu.init();
 	}
 }
-
