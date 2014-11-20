@@ -1,8 +1,8 @@
 import lejos.nxt.*;
 
 /**
- * Music State!
- * This class contains the magic that makes the music!
+ * MusicState.java
+ * 
  * 
  * @author TeamBeard
  */
@@ -11,11 +11,11 @@ public class MusicState implements MenuListener {
 	private Menu menu;
 	// Menu items
 	private static final String CHROMATIC="Chromatic", MAJOR="Major lydian", MINOR="Minor harmonic", RESCAN="Rescan", CANCEL="Cancel";
-	//
+	// 
 	private Robot robot;
-	//
+	// 
 	private boolean[][] scanArray;
-	//
+	// 
 	private MusicGenerator composer = new MusicGenerator();
 	
 
@@ -29,8 +29,8 @@ public class MusicState implements MenuListener {
 
 
 	/**
-	*
-	*
+	* Switches on menuItem and composes music based on the chosen scale 
+	* @param menuItem User selected menu item
 	*/
 	@Override
 	public void onMenuEvent(String menuItem) {
@@ -61,7 +61,7 @@ public class MusicState implements MenuListener {
 	}
 
 	/**
-	*
+	* Initializes the music menu and starts a new scan.
 	*
 	*
 	*/

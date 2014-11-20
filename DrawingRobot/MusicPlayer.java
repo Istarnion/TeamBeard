@@ -4,13 +4,19 @@ import lejos.nxt.*;
 * This class plays the composition made in the MusicState
 *
 *
-*
+* @author TeamBeard
 */
 class MusicPlayer {
 
 	private MusicPlayer() {	
 	}
 
+	/**
+	*
+	* Plays the music
+	* 
+	* @param composition This is the array from the MusicGenerator class.
+	*/
 	public static void play(int[][] composition) {
 		LCD.clearDisplay();
 		for(int i = 0; Button.ESCAPE.isUp() && (i < composition[0].length); i++) {
