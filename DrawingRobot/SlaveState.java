@@ -2,6 +2,18 @@ import java.io.*;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 
+/**
+*	SlaveState.java
+*
+*	This state sets the NXT into a slave mode, meaning it will first listen and wait for a connection,
+*	then listen to the stream for incoming command-bytes.
+*	6 commands is defined, where 0 is special, because it will (or shall) de followed by 64*64 single
+*	bits that together for a two-dimensional boolean array.
+*
+*	This class is made to function with the Drawduck PC application.
+*
+*	@author TeamBeard
+*/
 class SlaveState {
 
 	private boolean[][] sourceArray;

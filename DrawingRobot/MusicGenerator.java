@@ -1,19 +1,28 @@
 import java.util.Random;
 import lejos.nxt.*;
 
+/**
+*	MusicGenerator.java
+*
+*	This class generates music based on the bool scanArray
+*
+* @author TeamBeard
+*/
 class MusicGenerator {
 	private int[] noteArray = new int[25];
 	private int[] scaleArray;
 	private int[][] composition = new int[2][512];
 	private static final double MUSIC_CONSTANT = 1.05946309436;
 
+
 	public MusicGenerator() {
 		generateTones();
 	}
-	/** Method for creating note frequencies for noteArray, by the function 
+	/** 
+	*   Method for creating note frequencies for noteArray, by the function 
 	*	f(n) = 12th-rt(2)^(n-49) * 440
 	*	where 440 is the note A4, and n is the n-th key on a 88-key piano.
-	*	Read more about this on <a href="http://en.wikipedia.org/wiki/Piano_key_frequencies">Wikipedia (Piano key frequencies</a>
+	*	Read more about this on http://en.wikipedia.org/wiki/Piano_key_frequencies
 	*
 	*/
 	private void generateTones() {
@@ -22,19 +31,23 @@ class MusicGenerator {
 		}
 	}
 
-	// Generate music!
+	/**
+	* This method creates the composition array
+	*
+	* @param scanArray Input drawing. Comes either from the scanner, or the DrawDuck PC interface.
+	*/
 	public void generateMusic(boolean[][] scanArray) {
-		short[] scanArrayConverted = convertBool2DToShort2D(scanArray);
-		Random randomLastNote = new Random();
-		Random random = new Random(1337); // Random generator for spicing things up if the same leap is made many times in  a row		
+		short[] scanArrayConverted 		= convertBool2DToShort2D(scanArray);
+		Random randomLastNote 			= new Random(); 				// Random generator for the initial starting note.
+		Random random 					= new Random(1337); 			// Random generator for spicing things up if the same leap is made many times in  a row.		
 
-		int noteLength; // stores the int that is returned from getNoteLength()
-		int indexOfLeaps; // stores the int that is returned from getNoteLeapBits()
-		int leap = 0; // 
-		int turnCounter = 0;
-		int lastLeap = 0; // Keeps a track of what the last leap was
-		int leapRepeatCounter = 0; // Counts how many times a leap has been repeated
-		int lastNote = randomLastNote.nextInt(14); // keeps track of the last note (the number is used as index in scaleArray).
+		int noteLength; 												// Stores the int that is returned from getNoteLength()
+		int indexOfLeaps; 												// Stores the int that is returned from getNoteLeapBits()
+		int leap 						= 0; 							// The current leap to be made
+		int turnCounter 				= 0; 							// Keeps track of how many turns have been made based on leapRepeatCounter
+		int lastLeap 					= 0; 							// Keeps a track of what the last leap was
+		int leapRepeatCounter 			= 0; 							// Counts how many times a leap has been repeated
+		int lastNote 					= randomLastNote.nextInt(14); 	// Keeps track of the last note (the number is used as index in scaleArray).
 
 
 		// Check what int getNoteLengthBits returns and set the frequency of the note
@@ -65,12 +78,13 @@ class MusicGenerator {
 			// Index 0:
 			// Make a second leap
 			if(indexOfLeaps < 1) {
+				// If there has been too many second leaps in a row, make a random third leap instead. 2 is up, -2 is down.
 				if(turnCounter > 1) {
 					leap = random.nextInt(2) == 0 ? 2 : -2;
 					turnCounter = 0;
 				}
 				else {
-					// Is the last leap a second? If not, make a random second leap, -1 is down, 1 is up 
+					// Is the last leap a second? If not, make a random second leap, -1 is down, 1 is up.
 					if(lastLeap != 1 && lastLeap != -1) {
 						leap = random.nextInt(2) == 0 ? 1 : -1;
 					}
@@ -80,6 +94,7 @@ class MusicGenerator {
 						leapRepeatCounter = 0;
 						turnCounter++;
 					}
+
 					else {
 						leap = lastLeap == 1 ? 1 : -1;
 					}
@@ -87,7 +102,7 @@ class MusicGenerator {
 			}
 
 			// Index 1-62:
-			// Make a random leap, fourth, fifth or sixth
+			// Make a random leap, prime to sept
 			else if(isBetween(indexOfLeaps, 1, 62)) {
 				leap = randomLastNote.nextInt(7);
 			}
@@ -149,14 +164,22 @@ class MusicGenerator {
 		return lower <= x && x <= upper;
 	}
 	
-	// Creates a scaleArray equal to the original noteArray
+	/**
+	* Creates a scaleArray equal to the original noteArray
+	* 
+	* @param scanArray Input array from either the robot scanner, or the DrawDuck PC interface.
+	*/ 
 	public void generateChromatic(boolean[][] scanArray) {
 		scaleArray = noteArray;
 		generateMusic(scanArray);
 		MusicPlayer.play(composition);
 	}
 	
-	// Creates a scaleArray with notes from the C major lydian scale
+	/**
+	* Creates a scaleArray with notes from the C major lydian scale
+	*
+	* @param scanArray Input array from either the robot scanner, or the DrawDuck PC interface.
+	*/ 
 	public void generateMajorLydian(boolean[][] scanArray) {
 		scaleArray = new int[] 
 		{noteArray[0], noteArray[2], noteArray[4], noteArray[5], noteArray[7], 
@@ -167,7 +190,11 @@ class MusicGenerator {
 		MusicPlayer.play(composition);
 	}
 
-	// Creates a scaleArray with notes from the C Minor harmonic scale
+	/** 
+	* Creates a scaleArray with notes from the C Minor harmonic scale
+	*
+	* @param scanArray Input array from either the robot scanner, or the DrawDuck PC interface.
+	*/
 	public void generateMinorHarmonic(boolean[][] scanArray) {
 		scaleArray = new int[]
 		{noteArray[0], noteArray[2], noteArray[3], noteArray[5], noteArray[7], 
