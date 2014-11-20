@@ -94,7 +94,7 @@ class MusicGenerator {
 			// Index 1-62:
 			// Make a random leap, fourth, fifth or sixth
 			else if(isBetween(indexOfLeaps, 1, 62)) {
-				leap = randomLastNote.nextInt(3) + 3;
+				leap = randomLastNote.nextInt(7);
 			}
 
 			// Index 63: 
