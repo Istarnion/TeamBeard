@@ -2,7 +2,7 @@ import lejos.nxt.*;
 
 /**DrawingRobot.java
  * 
- * <p>
+ * 
  * The main class.
  * We just initialize the menuState
  *

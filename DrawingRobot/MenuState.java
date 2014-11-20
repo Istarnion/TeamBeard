@@ -1,7 +1,7 @@
 import lejos.nxt.*;
 
-/** Menu.java
- *  
+/** 
+ *  Menu.java
  *  This class handles the main menu.
  *	It provides the user options to choose between the different functionalities of the robot.
  *	@author TeamBeard

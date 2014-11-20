@@ -1,8 +1,8 @@
 import lejos.nxt.*;
 
 
-/**CopyState.java
- *
+/** 
+ * CopyState.java
  * Copies the provided drawing.
  * 
  * @author TeamBeard
