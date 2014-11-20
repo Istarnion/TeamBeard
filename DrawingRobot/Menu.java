@@ -1,5 +1,14 @@
 import lejos.nxt.*;
 
+/**
+*	Menu.java
+*
+*	This is the generalized class for the menues we run on the NXT.
+*	It makes use of the MenuListener interface to report user-events to the classes in charge of the menu,
+*	inspired by Java's ActionListener.
+*	@see java.awt.event.ActionListener
+*	@author TeamBeard
+*/
 class Menu {
 
 	private int currOption = 0;
@@ -12,6 +21,12 @@ class Menu {
 		menuListener = ml;
 	}
 
+	/**
+	*	Draws (refreshes) the menu to the LCD display.
+	*	Calling this method from outside this class is in most cases useless,
+	*	as we are running everything in a single thread, and the menu refreshes itself as it
+	*	regains control after a method call has been completed.
+	*/
 	public void drawMenu() {
 		LCD.clearDisplay();
 		for(int i = 0; i < menuItems.length; i++) {
@@ -24,6 +39,9 @@ class Menu {
 		}
 	}
 
+	/**
+	*	This initializes the menu-loop, that will wait for user input, and then warn the MenuListener.
+	*/
 	public void init() {
 		drawMenu();
 		while(Button.ESCAPE.isUp() && !exit) {
@@ -48,6 +66,10 @@ class Menu {
 		}
 	}
 
+	/**
+	*	Sets the exit-flag to true, so the menu will exit out of itself,
+	*	returning the previous menu, or if we are in the main menu, exiting the program.
+	*/
 	public void exit() {
 		exit = true;
 	}

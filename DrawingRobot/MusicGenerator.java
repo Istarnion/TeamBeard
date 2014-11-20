@@ -1,6 +1,11 @@
 import java.util.Random;
 import lejos.nxt.*;
 
+/**
+*	MusicGenerator.java
+*
+*	General description of class goes here
+*/
 class MusicGenerator {
 	private int[] noteArray = new int[25];
 	private int[] scaleArray;

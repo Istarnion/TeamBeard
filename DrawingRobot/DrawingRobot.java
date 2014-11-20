@@ -4,7 +4,9 @@ import lejos.nxt.*;
  * 
  * <p>
  * The main class.
- * We just initializes the menuState
+ * We just initialize the menuState
+ *
+ * @author TeamBeard
  */
 public class DrawingRobot
 {
