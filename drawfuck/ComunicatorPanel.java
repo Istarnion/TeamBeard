@@ -170,6 +170,8 @@ class ComunicatorPanel extends JPanel implements ActionListener {
 		switch(ae.getActionCommand()) {
 			case "connect":
 				if(!connected) {
+					messageLabel.setText("Waiting for connection..");
+					waitingDialog.add(messageLabel, BorderLayout.CENTER);
 					waitingDialog.setVisible(true);
 					try {
 						nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);

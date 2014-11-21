@@ -30,8 +30,4 @@ public class CopyState {
 
 		robot.draw(drawing);
 	}
-	
-	public CopyState() {
-		init();
-	}
 }

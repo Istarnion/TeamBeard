@@ -37,7 +37,7 @@ public class Robot {
 	private NXTRegulatedMotor marker;
 	
 	// Boolean for if the marker is up or down
-	private boolean isDown;
+	private boolean isDown = false;
 	
 	// The light sensor
 	private LightSensor lightSensor;
@@ -172,7 +172,7 @@ public class Robot {
 	 * Toggles the marker. If it is currently up, we move it down, and vice versa.
 	 */
 	public void toggleMarker() {
-		marker.rotateTo(isDown?-40:0);
+		setMarker(!isDown);
 		isDown = !isDown;
 	}
 
@@ -200,7 +200,7 @@ public class Robot {
 
 		boolean right = true;
 		boolean[] dataline;
-		for(int i=0; i<Y_POS_MAX; i++) {
+		for(int i=0; (Button.ESCAPE.isUp() && i<Y_POS_MAX); i++) {
 			LCD.drawString(i+"/63", 11, 3, false);
 
 			dataline = readLine(right);
@@ -246,7 +246,7 @@ public class Robot {
 
 
 		boolean right = true;
-		for(int i=0; i<barray.length; i++) {
+		for(int i=0; (Button.ESCAPE.isUp() && i<barray.length); i++) {
 			LCD.drawString(i+"/63", 11, 3, false);
 
 			boolean[] line = barray[i];
@@ -271,13 +271,12 @@ public class Robot {
 
 		// Reset
 		setMarker(false);
+		xAxis.setSpeed(100);
 		setXPos(0);
 		setYPos(0);
 		xAxis.flt();
 		yAxis.flt();
 		marker.flt();
-
-		xAxis.setSpeed(100);
 
 		Sound.twoBeeps();
 	}
@@ -295,7 +294,7 @@ public class Robot {
 		Thread t = new Thread() {
 			@Override
 			public void run() {
-				for(byte b=0; (b<(byte)dataline.length && !isInterrupted()); b++) {
+				for(byte b=0; (b<(byte)dataline.length && !isInterrupted() && Button.ESCAPE.isUp()); b++) {
 					try {
 						sleep(MILLIS_PER_UNIT);
 					}
@@ -337,7 +336,7 @@ public class Robot {
 				int prevDelay = 0;
 				long timeStamp = System.currentTimeMillis();
 				setMarker(barray[0]);
-				for(byte b=0; (b<(byte)barray.length && !isInterrupted()); b++) {
+				for(byte b=0; (Button.ESCAPE.isUp() && b<(byte)barray.length && !isInterrupted()); b++) {
 					try {
 						sleep(currSleep-prevDelay);
 					}
